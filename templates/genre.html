@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h2>Search by Genre</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label for="genre">Choose a genre:</label>
+        {{ form.genre(id="genre") }}
+        {{ form.submit() }}
+    </form>
+
+    {% if movies %}
+        <h3>Results:</h3>
+        <ul>
+            {% for movie in movies %}
+                <li>{{ movie.title }} ({{ movie.year }}) - {{ movie.score }}/10</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}">Back to Home</a>
+{% endblock %}

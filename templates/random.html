@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h2>Random Movie Recommendation</h2>
+    {% if movie %}
+        <p><strong>{{ movie.title }}</strong> ({{ movie.year }})</p>
+        <p>Genre: {{ movie.genre }} | Score: {{ movie.score }}</p>
+        <p>Director: {{ movie.director }}</p>
+        <p>{{ movie.description }}</p>
+    {% else %}
+        <p>No movies found.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}">Back to Home</a>
+{% endblock %}
