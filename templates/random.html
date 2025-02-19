@@ -3,12 +3,17 @@
 {% block main_content %}
     <h2>Random Movie Recommendation</h2>
     {% if movie %}
-        <p><strong>{{ movie.title }}</strong> ({{ movie.year }})</p>
-        <p>Genre: {{ movie.genre }} | Score: {{ movie.score }}</p>
-        <p>Director: {{ movie.director }}</p>
-        <p>{{ movie.description }}</p>
+        <div class="movie-container">
+            <div class="movie-card">
+                <h3>{{ movie.title }} ({{ movie.year }})</h3>
+                <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                <p><strong>Score:</strong> ⭐ {{ movie.score }}/10</p>
+                <p><strong>Director:</strong> {{ movie.director }}</p>
+                <p>{{ movie.description }}</p>
+            </div>
+        </div>
     {% else %}
         <p>No movies found.</p>
     {% endif %}
-    <a href="{{ url_for('index') }}">Back to Home</a>
+    <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}
