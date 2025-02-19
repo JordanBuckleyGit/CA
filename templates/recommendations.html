@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h2>Recommended Movies</h2>
+    <ul>
+        {% for movie in movies %}
+        <li>{{ movie.title }} ({{ movie.genre }}) - Rating: {{ movie.score }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+{% endblock %}

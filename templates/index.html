@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <div class="welcome-container">
+        <h1>Welcome to Movie DNA</h1>
+        <p>Your personal movie recommender. Choose how you'd like to search for a movie:</p>
+        
+        <div class="menu">
+            <a href="{{ url_for('random_movie') }}" class="menu-item">🎲 Random Movie</a>
+            <a href="{{ url_for('genre_search') }}" class="menu-item">🎭 Search by Genre</a>
+            <a href="{{ url_for('score_search') }}" class="menu-item">⭐ Search by Score</a>
+            <a href="{{ url_for('year_search') }}" class="menu-item">📅 Search by Year</a>
+        </div>
+    </div>
+{% endblock %}
