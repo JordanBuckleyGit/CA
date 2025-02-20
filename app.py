@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import random
 from database import get_db, close_db
 from flask_session import Session
-from forms import MovieForm, ScoreForm, YearForm, ReviewForm
+from forms import MovieForm, ScoreForm, YearForm
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "jordansPw"
