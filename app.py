@@ -2,10 +2,10 @@ from flask import Flask, render_template, request
 import random
 from database import get_db, close_db
 from flask_session import Session
-from forms import MovieForm, ScoreForm, YearForm
+from forms import MovieForm, ScoreForm, YearForm, ReviewForm
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "this"
+app.config["SECRET_KEY"] = "jordansPw"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
@@ -66,3 +66,23 @@ def year_search():
         movies = db.execute("SELECT * FROM movies WHERE year = ?", (year,)).fetchall()
     return render_template("year.html", form=form,
                             movies=movies)
+
+# @app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
+# def movie_details(movie_id):
+#     db = get_db()
+#     form = ReviewForm()
+    
+#     if form.validate_on_submit():
+#         review_text = form.review_text.data
+#         rating = form.rating.data
+#         user = "Anonymous"  # Replace with user authentication if available
+#         db.execute("INSERT INTO reviews (movie_id, user, review_text, rating) VALUES (?, ?, ?, ?)",
+#                    (movie_id, user, review_text, rating))
+#         db.commit()
+    
+#     movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
+#     reviews = db.execute("SELECT * FROM reviews WHERE movie_id = ?", (movie_id,)).fetchall()
+
+#     return render_template("reviews.html", movie=movie, 
+#                            reviews=reviews, 
+#                            form=form)

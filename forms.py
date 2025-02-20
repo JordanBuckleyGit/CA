@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, SubmitField, FloatField, IntegerField
+from wtforms import SelectField, SubmitField, FloatField, IntegerField, TextAreaField
 from wtforms.validators import InputRequired, NumberRange
 
 class MovieForm(FlaskForm):
@@ -22,3 +22,10 @@ class ScoreForm(FlaskForm):
 class YearForm(FlaskForm):
     year = IntegerField("Year", validators=[InputRequired(), NumberRange(min=1900, max=2100)])
     submit = SubmitField("Search by Year")
+
+    
+# class ReviewForm(FlaskForm):
+#     review_text = TextAreaField("Your Review", validators=[InputRequired()])
+#     rating = IntegerField("Rating (1-10)", validators=[InputRequired(), NumberRange(min=1, max=10)])
+#     submit = SubmitField("Submit Review")
+

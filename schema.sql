@@ -24,3 +24,13 @@ INSERT INTO movies (title, genre, score, year, director, description) VALUES
     ('Forrest Gump', 'Drama', 8.8, 1994, 'Robert Zemeckis', 'The presidencies of Kennedy and Johnson, the events of Vietnam, Watergate, and other historical events unfold through the perspective of an Alabama man with an IQ of 75.'),
     ('The Lord of the Rings: The Return of the King', 'Fantasy', 8.9, 2003, 'Peter Jackson', 'Gandalf and Aragorn lead the World of Men against Saurons army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.'),
     ('Gladiator', 'Action', 8.5, 2000, 'Ridley Scott', 'A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery.');
+
+
+-- CREATE TABLE reviews (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     movie_id INTEGER NOT NULL,
+--     user TEXT NOT NULL,
+--     review_text TEXT NOT NULL,
+--     rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 10),
+--     FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
+-- );

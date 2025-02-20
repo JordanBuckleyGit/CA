@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <div class="movie-container">
+        <h1>{{ movie.title }}</h1>
+        <p><strong>Genre:</strong> {{ movie.genre }}</p>
+        <p><strong>Score:</strong> {{ movie.score }}</p>
+        <p><strong>Year:</strong> {{ movie.year }}</p>
+        <p><strong>Director:</strong> {{ movie.director }}</p>
+        <p>{{ movie.description }}</p>
+    </div>
+
+    <h2>Reviews</h2>
+    {% for review in reviews %}
+        <div class="review">
+            <p><strong>{{ review.user }}</strong> rated {{ review.rating }}/10</p>
+            <p>{{ review.review_text }}</p>
+        </div>
+    {% else %}
+        <p>No reviews yet. Be the first to review!</p>
+    {% endfor %}
+
+    <h2>Write a Review</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label for="review_text">Review:</label>
+        {{ form.review_text() }}
+        <label for="rating">Rating (1-10):</label>
+        {{ form.rating() }}
+        {{ form.submit() }}
+    </form>
+{% endblock %}
