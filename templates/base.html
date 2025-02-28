@@ -5,11 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Recommender</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </head>
-    <body>
-        {% block main_content %}
-        {% endblock %}
-    </body>
+<body>
+    <header>
+        <nav>
+            <section id="nav-container">
+                <section id="nav-logo">
+                    <a href="{{ url_for('index') }}">Movie Recommender</a>
+                </section>
+                <button id="nav-toggle" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <section id="nav-links">
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('random_movie') }}">Random Movie</a></li>
+                        <li><a href="{{ url_for('genre_search') }}">Search by Genre</a></li>
+                        <li><a href="{{ url_for('score_search') }}">Search by Score</a></li>
+                        <li><a href="{{ url_for('year_search') }}">Search by Year</a></li>
+                    </ul>
+                </section>
+                <section id="nav-user">
+                    {% if session['user_id'] %}
+                        <section id="user-info">
+                            <span id="username">{{ session['user_id'] }}</span>
+                            <i class="fas fa-user-circle" id="user-icon"></i>
+                        </section>
+                        <a href="{{ url_for('logout') }}" id="logout-btn">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" id="login-btn">Login</a>
+                        <a href="{{ url_for('registration') }}" id="register-btn">Register</a>
+                    {% endif %}
+                </section>
+            </section>
+        </nav>
+    </header>
+    
+    <main>
+        <section id="hero">
+            <div id="dna-container">
+                <div class="dna-box">
+                    <a href="{{ url_for('random_movie') }}">Random Movie</a>
+                </div>
+                <div class="dna-box">
+                    <a href="{{ url_for('genre_search') }}">Search by Genre</a>
+                </div>
+                <div class="dna-box">
+                    <a href="{{ url_for('score_search') }}">Search by Score</a>
+                </div>
+                <div class="dna-box">
+                    <a href="{{ url_for('year_search') }}">Search by Year</a>
+                </div>
+            </div>
+        </section>
+        {% block main_content %}{% endblock %}
+    </main>
+
+    <footer>
+        <section id="footer-container">
+            <p>&copy; 2025 Movie Recommender. All rights reserved.</p>
+            <ul id="footer-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </section>
+    </footer>
+</body>
 </html>

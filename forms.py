@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, SubmitField, FloatField, IntegerField, TextAreaField
-from wtforms.validators import InputRequired, NumberRange
+from wtforms import StringField, SelectField, SubmitField, FloatField, IntegerField, TextAreaField, PasswordField
+from wtforms.validators import InputRequired, NumberRange, EqualTo
 
 class MovieForm(FlaskForm):
     genre = SelectField("Genre", choices=[
@@ -23,6 +23,22 @@ class YearForm(FlaskForm):
     year = IntegerField("Year", validators=[InputRequired(), NumberRange(min=1900, max=2100)])
     submit = SubmitField("Search by Year")
 
+class RegistrationForm(FlaskForm):
+    user_id = StringField("User id:",
+                    validators=[InputRequired()])
+    password = PasswordField("Password:",
+                    validators=[InputRequired()])
+    password2 = PasswordField("Repeat Password:",
+                    validators=[InputRequired(),
+                                EqualTo("password")])
+    submit = SubmitField("Submit")
+
+class LoginForm(FlaskForm):
+    user_id = StringField("User id:",
+                    validators=[InputRequired()])
+    password = PasswordField("Password:",
+                    validators=[InputRequired()])
+    submit = SubmitField("Submit")
     
 # class ReviewForm(FlaskForm):
 #     review_text = TextAreaField("Your Review", validators=[InputRequired()])
