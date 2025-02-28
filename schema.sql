@@ -32,11 +32,11 @@ CREATE TABLE users (
     password TEXT NOT NULL
 );
 
--- CREATE TABLE reviews (
---     id INTEGER PRIMARY KEY AUTOINCREMENT,
---     movie_id INTEGER NOT NULL,
---     user TEXT NOT NULL,
---     review_text TEXT NOT NULL,
---     rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 10),
---     FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
--- );
+CREATE TABLE reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    movie_id INTEGER NOT NULL,
+    user TEXT NOT NULL,
+    review_text TEXT NOT NULL,
+    rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 10),
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
+);

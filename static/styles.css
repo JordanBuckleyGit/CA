@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-/* Dark Themed Background with Animation */
+
 body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(-45deg, #0f0f0f, #1c1c1c, #2c2c2c, #000000);
@@ -25,9 +25,9 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Navigation Bar */
+
 nav {
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(255, 255, 255, 0.05);
     padding: 10px 20px;
     display: flex;
     justify-content: center;
@@ -48,7 +48,7 @@ nav {
 #nav-logo a {
     font-size: 24px;
     font-weight: bold;
-    color: #FFD700;
+    color: #A9DFBF;
     text-decoration: none;
 }
 
@@ -66,7 +66,7 @@ nav {
 }
 
 #nav-links ul li a:hover {
-    color: #FFD700;
+    color: #A9DFBF;
 }
 
 #nav-user {
@@ -100,12 +100,12 @@ nav {
 }
 
 #login-btn, #register-btn {
-    background: #007BFF;
+    background: #A9DFBF;
     color: white;
 }
 
 #login-btn:hover, #register-btn:hover {
-    background: #0056b3;
+    background: rgba(0, 255, 166, 0.3);
 }
 
 #logout-btn {
@@ -136,7 +136,7 @@ nav {
 
 .dna-box {
     background: rgba(255, 255, 255, 0.1);
-    border: 2px solid #FFD700;
+    border: 2px solid #A9DFBF;
     border-radius: 20px;
     padding: 30px;
     text-align: center;
@@ -146,7 +146,7 @@ nav {
 
 .dna-box:hover {
     transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 255, 166, 0.3);
 }
 
 .dna-box a {
@@ -156,39 +156,136 @@ nav {
     font-weight: bold;
 }
 
-/* Footer */
-footer {
-    background: rgba(0, 0, 0, 0.9);
-    padding: 20px;
-    margin-top: auto;
+#home-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; 
+    height: 40px; 
+    background-color: #A9DFBF;
+    color: white; /* White icon */
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 20px;
+    transition: background 0.3s ease;
 }
 
-#footer-container {
-    max-width: 1200px;
-    margin: 0 auto;
+#home-icon:hover {
+    background-color: rgba(0, 255, 166, 0.3);
+}
+
+.footer {
+    background: rgba(255, 255, 255, 0.1); /* Semi-transparent dark box */
+    border: 2px solid #A9DFBF;
+    border-radius: 20px; /* Rounded corners */
+    padding: 40px;
+    width: 90%; /* Doesn't take full width */
+    max-width: 95%; /* Centered box size */
+    margin: 40px auto; /* Centered on the page */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.footer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 166, 0.3);
+}
+
+.footer-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
+    padding: 20px 0;
 }
 
-#footer-links {
+.footer-logo img {
+    max-width: 80px;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.footer-logo img:hover {
+    transform: scale(1.1);
+}
+
+.footer-logo h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #A9DFBF;
+}
+
+.footer-links,
+.footer-contact {
+    flex: 1;
+    margin: 10px;
+    min-width: 180px;
+}
+
+.footer-links h3,
+.footer-contact h3 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+    color: #A9DFBF;
+}
+
+.footer-links ul {
     list-style: none;
-    display: flex;
-    gap: 20px;
+    padding: 0;
 }
 
-#footer-links li a {
+.footer-links ul li {
+    margin-bottom: 8px;
+}
+
+.footer-links ul li a {
     color: white;
     text-decoration: none;
-    font-size: 14px;
     transition: color 0.3s ease;
 }
 
-#footer-links li a:hover {
-    color: #FFD700;
+.footer-links ul li a:hover {
+    color: #A9DFBF;
 }
 
-/* Responsive Design */
+.footer-contact a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-contact a:hover {
+    color: #A9DFBF;
+}
+
+.footer-bottom {
+    padding-top: 15px;
+    border-top: 1px solid #444;
+    margin-top: 20px;
+}
+
+.footer-bottom p,
+.footer-bottom a {
+    color: #bbb;
+    font-size: 0.9em;
+}
+
+.footer-bottom a {
+    margin-left: 15px;
+    text-decoration: none;
+}
+
+.social-icons a {
+    font-size: 1.2em;
+    color: white;
+    margin: 0 8px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #A9DFBF;
+}
+
+
 @media (max-width: 768px) {
     #nav-links {
         display: none;

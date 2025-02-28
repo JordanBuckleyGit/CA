@@ -40,8 +40,8 @@ class LoginForm(FlaskForm):
                     validators=[InputRequired()])
     submit = SubmitField("Submit")
     
-# class ReviewForm(FlaskForm):
-#     review_text = TextAreaField("Your Review", validators=[InputRequired()])
-#     rating = IntegerField("Rating (1-10)", validators=[InputRequired(), NumberRange(min=1, max=10)])
-#     submit = SubmitField("Submit Review")
+class ReviewForm(FlaskForm):
+    review_text = TextAreaField("Your Review", validators=[InputRequired()])
+    rating = IntegerField("Rating (1-10)", validators=[InputRequired(), NumberRange(min=1, max=10)])
+    submit = SubmitField("Submit Review")
 

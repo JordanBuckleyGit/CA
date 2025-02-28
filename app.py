@@ -1,9 +1,9 @@
 from flask import Flask, render_template, session, redirect, url_for, g, request
-import random
+# import random
 from database import get_db, close_db
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm
+from forms import MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm
 from functools import wraps
 
 app = Flask(__name__)
@@ -27,14 +27,33 @@ def login_required(view):
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("base.html")
 
-@app.route("/random")
+@app.route("/random", methods=["GET", "POST"])
 def random_movie():
     db = get_db()
     movie = db.execute("SELECT * FROM movies ORDER BY RANDOM() LIMIT 1").fetchone()
-    return render_template("random.html",
-                            movie=movie)
+    
+    form = ReviewForm()  # Define the form
+
+    if form.validate_on_submit():
+        review_text = form.review_text.data
+        rating = form.rating.data
+        user = session.get("user_id", "Anonymous")  # Use logged-in user or Anonymous
+
+        db.execute(
+            "INSERT INTO reviews (movie_id, user, review_text, rating) VALUES (?, ?, ?, ?)",
+            (movie["movie_id"], user, review_text, rating),
+        )
+        db.commit()
+
+        # Refresh page to show the new review
+        return redirect(url_for("random_movie"))
+
+    reviews = db.execute("SELECT * FROM reviews WHERE movie_id = ?", (movie["movie_id"],)).fetchall()
+
+    return render_template("random.html", movie=movie, reviews=reviews, form=form)
+
 
 @app.route("/recommendations", methods=["GET", "POST"])
 def recommendations():
@@ -99,25 +118,25 @@ def registration():
             return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
-# @app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
-# def movie_details(movie_id):
-#     db = get_db()
-#     form = ReviewForm()
+@app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
+def movie_details(movie_id):
+    db = get_db()
+    form = ReviewForm()
     
-#     if form.validate_on_submit():
-#         review_text = form.review_text.data
-#         rating = form.rating.data
-#         user = "Anonymous"  # Replace with user authentication if available
-#         db.execute("INSERT INTO reviews (movie_id, user, review_text, rating) VALUES (?, ?, ?, ?)",
-#                    (movie_id, user, review_text, rating))
-#         db.commit()
+    if form.validate_on_submit():
+        review_text = form.review_text.data
+        rating = form.rating.data
+        user = "Anonymous"
+        db.execute("INSERT INTO reviews (movie_id, user, review_text, rating) VALUES (?, ?, ?, ?)",
+                   (movie_id, user, review_text, rating))
+        db.commit()
     
-#     movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
-#     reviews = db.execute("SELECT * FROM reviews WHERE movie_id = ?", (movie_id,)).fetchall()
+    movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
+    reviews = db.execute("SELECT * FROM reviews WHERE movie_id = ?", (movie_id,)).fetchall()
 
-#     return render_template("reviews.html", movie=movie, 
-#                            reviews=reviews, 
-#                            form=form)
+    return render_template("reviews.html", movie=movie, 
+                           reviews=reviews, 
+                           form=form)
 
 @app.route("/login", methods=["GET","POST"])
 def login():

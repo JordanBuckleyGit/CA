@@ -15,5 +15,25 @@
     {% else %}
         <p>No movies found.</p>
     {% endif %}
+
+    <h2>Reviews</h2>
+    {% for review in reviews %}
+        <div class="review">
+            <p><strong>{{ review.user }}</strong> rated {{ review.rating }}/10</p>
+            <p>{{ review.review_text }}</p>
+        </div>
+    {% else %}
+        <p>No reviews yet. Be the first to review!</p>
+    {% endfor %}
+
+    <h2>Write a Review</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <label for="review_text">Review:</label>
+        {{ form.review_text() }}
+        <label for="rating">Rating (1-10):</label>
+        {{ form.rating() }}
+        {{ form.submit() }}
+    </form>
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}

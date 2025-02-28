@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </head>
+
 <body>
     <header>
         <nav>
             <section id="nav-container">
+                <a href="/" id="home-icon">
+                    <i class="fa-solid fa-house"></i>
+                </a>
                 <section id="nav-logo">
                     <a href="{{ url_for('index') }}">Movie Recommender</a>
                 </section>
-                <button id="nav-toggle" aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
+
                 <section id="nav-links">
                     <ul>
                         <li><a href="{{ url_for('index') }}">Home</a></li>
@@ -29,21 +32,27 @@
                 </section>
                 <section id="nav-user">
                     {% if session['user_id'] %}
-                        <section id="user-info">
-                            <span id="username">{{ session['user_id'] }}</span>
-                            <i class="fas fa-user-circle" id="user-icon"></i>
-                        </section>
-                        <a href="{{ url_for('logout') }}" id="logout-btn">Logout</a>
+                    <section id="user-info">
+                        <span id="username">{{ session['user_id'] }}</span>
+                        <i class="fas fa-user-circle" id="user-icon"></i>
+                    </section>
+                    <a href="{{ url_for('logout') }}" id="logout-btn">Logout</a>
                     {% else %}
-                        <a href="{{ url_for('login') }}" id="login-btn">Login</a>
-                        <a href="{{ url_for('registration') }}" id="register-btn">Register</a>
+                    <a href="{{ url_for('login') }}" id="login-btn">Login</a>
+                    <a href="{{ url_for('registration') }}" id="register-btn">Register</a>
                     {% endif %}
                 </section>
             </section>
         </nav>
     </header>
-    
+
     <main>
+        <div class="welcome-container">
+            <h1>Welcome to Movie DNA</h1>
+            <p>Your Movie DNA. Choose how you'd like to search for a movie:</p>
+        </div>
+
+        {% if request.path == '/' %}
         <section id="hero">
             <div id="dna-container">
                 <div class="dna-box">
@@ -60,18 +69,51 @@
                 </div>
             </div>
         </section>
+        {% endif %}
+
         {% block main_content %}{% endblock %}
     </main>
 
-    <footer>
-        <section id="footer-container">
-            <p>&copy; 2025 Movie Recommender. All rights reserved.</p>
-            <ul id="footer-links">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
-            </ul>
-        </section>
+    <footer class="footer">
+        <section class="footer-container">
+            <section class="footer-logo">
+                <h2>Movie DNA</h2>
+                <img src="static/images/jordan_buckley.jpg" alt="Jordan Buckley" />
+            </section>
+
+            <section class="footer-links">
+                <h3>Pages</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/random">Random</a></li>
+                    <li><a href="/genre">Genre</a></li>
+                    <li><a href="/score">Score</a></li>
+                    <li><a href="/year">Year</a></li>
+                </ul>
+            </section>
+
+            <section class="footer-contact">
+                <h3>Contact Me</h3>
+                <p>Email: <a href="mailto:124403762@umail.ucc.ie">124403762@umail.ucc.ie</a></p>
+            </section>
+
+            <section class="footer-bottom">
+                <p>&copy; Jordan Buckley.</p>
+
+                <section class="social-icons">
+                    <a aria-label="Instagram" href="https://www.instagram.com/jordanbuckley_20/" target="_blank">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a aria-label="GitHub" href="https://github.com/JordanBuckleyGit" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a aria-label="LinkedIn" href="https://www.linkedin.com/in/jordan05/" target="_blank">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </section>
+            </section>
     </footer>
+
 </body>
+
 </html>

@@ -30,7 +30,7 @@ const dnaBoxes = document.querySelectorAll('.dna-box');
 dnaBoxes.forEach(box => {
     box.addEventListener('mouseenter', () => {
         box.style.transform = 'translateY(-10px)';
-        box.style.boxShadow = '0 10px 20px rgba(255, 215, 0, 0.3)';
+        box.style.boxShadow = '0 10px 20px rgba(0, 255, 166, 0.3)';
     });
     box.addEventListener('mouseleave', () => {
         box.style.transform = 'translateY(0)';
