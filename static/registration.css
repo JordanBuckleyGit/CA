@@ -9,3 +9,100 @@ nav {
 footer {
     display: none;
 }
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1.25rem;
+}
+
+#login-section {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #A9DFBF;
+    border-radius: 1.25rem;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#login-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 166, 0.3);
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #A9DFBF;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#login-form label {
+    font-size: 1rem;
+    color: white;
+    text-align: left;
+}
+
+#login-form input {
+    padding: 0.75rem;
+    border: 1px solid #A9DFBF;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+#login-form input:focus {
+    border-color: #A9DFBF;
+    outline: none;
+}
+
+#login-submit {
+    padding: 0.75rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: #A9DFBF;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+}
+
+#login-submit:hover {
+    background: rgba(0, 255, 166, 0.3);
+}
+
+#register-link {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: white;
+}
+
+#register-link a {
+    color: #A9DFBF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#register-link a:hover {
+    color: rgba(0, 255, 166, 0.3);
+}
+
+#error-message {
+    color: #FF4500;
+}
+
+#password2 {
+    margin-top: 0.5rem;
+}

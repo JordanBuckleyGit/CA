@@ -1,28 +1,36 @@
 {% extends "base.html" %}
-
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='registration.css') }}">
+{% endblock %}
 {% block main_content %}
 
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        {{ form.user_id.label }}
-        {{ form.user_id() }}
-        {% for error in form.user_id.errors %}
-            {{ error }}
-        {% endfor %}
-        </br>
-        {{ form.password.label }}
-        {{ form.password() }}
-        {% for error in form.password.errors %}
-            {{ error }}
-        {% endfor %}
-        </br>
-        {{ form.password2.label }}
-        {{ form.password2() }}
-        {% for error in form.password2.errors %}
-            {{ error }}
-        {% endfor %}
-        </br>
-        {{ form.submit() }}
-    </form>
+    <section id="login-section"> <!-- Reusing the same ID as login -->
+        <h1>Register</h1>
+        <form id="login-form" action="" method="post" novalidate> <!-- Reusing the same ID as login -->
+            {{ form.hidden_tag() }}
 
-    {% endblock %}
+            <label for="user_id">{{ form.user_id.label }}</label>
+            {{ form.user_id(id="user_id") }}
+            {% for error in form.user_id.errors %}
+                <p id="error-message">{{ error }}</p>
+            {% endfor %}
+
+            <label for="password">{{ form.password.label }}</label>
+            {{ form.password(id="password") }}
+            {% for error in form.password.errors %}
+                <p id="error-message">{{ error }}</p>
+            {% endfor %}
+
+            <label for="password2">{{ form.password2.label }}</label>
+            {{ form.password2(id="password2") }}
+            {% for error in form.password2.errors %}
+                <p id="error-message">{{ error }}</p>
+            {% endfor %}
+
+            <p id="login-submit">{{ form.submit() }}</p> 
+        </form>
+
+        <p id="register-link">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </section>
+
+{% endblock %}
