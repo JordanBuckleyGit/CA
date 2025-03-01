@@ -26,10 +26,12 @@ def login_required(view):
     return wrapped_view
 
 @app.route("/")
+@login_required
 def index():
     return render_template("base.html")
 
 @app.route("/random", methods=["GET", "POST"])
+@login_required
 def random_movie():
     db = get_db()
     movie = db.execute("SELECT * FROM movies ORDER BY RANDOM() LIMIT 1").fetchone()
@@ -56,6 +58,7 @@ def random_movie():
 
 
 @app.route("/recommendations", methods=["GET", "POST"])
+@login_required
 def recommendations():
     form = MovieForm()
     movies = None
@@ -67,6 +70,7 @@ def recommendations():
                             movies=movies)
 
 @app.route("/genre", methods=["GET", "POST"])
+@login_required
 def genre_search():
     form = MovieForm()
     movies = None
@@ -78,6 +82,7 @@ def genre_search():
                             movies=movies)
 
 @app.route("/score", methods=["GET", "POST"])
+@login_required
 def score_search():
     form = ScoreForm()
     movies = None
@@ -90,6 +95,7 @@ def score_search():
                             movies=movies)
 
 @app.route("/year", methods=["GET", "POST"])
+@login_required
 def year_search():
     form = YearForm()
     movies = None
@@ -100,25 +106,8 @@ def year_search():
     return render_template("year.html", form=form,
                             movies=movies)
 
-@app.route("/registration", methods=["GET", "POST"])
-def registration():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user_id = form.user_id.data
-        password = form.password.data
-        db = get_db()
-
-        user_in_db = db.execute("SELECT * FROM users WHERE user_id = ?;", (user_id,)).fetchone()
-        if user_in_db:
-            form.user_id.errors.append("User ID already exists! Please choose a different one.")
-        else:
-            hashed_password = generate_password_hash(password)
-            db.execute("INSERT INTO users (user_id, password) VALUES (?, ?);", (user_id, hashed_password))
-            db.commit()
-            return redirect(url_for("login"))
-    return render_template("register.html", form=form)
-
 @app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
+@login_required
 def movie_details(movie_id):
     db = get_db()
     form = ReviewForm()
@@ -137,6 +126,24 @@ def movie_details(movie_id):
     return render_template("reviews.html", movie=movie, 
                            reviews=reviews, 
                            form=form)
+
+@app.route("/registration", methods=["GET", "POST"])
+def registration():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        password = form.password.data
+        db = get_db()
+
+        user_in_db = db.execute("SELECT * FROM users WHERE user_id = ?;", (user_id,)).fetchone()
+        if user_in_db:
+            form.user_id.errors.append("User ID already exists! Please choose a different one.")
+        else:
+            hashed_password = generate_password_hash(password)
+            db.execute("INSERT INTO users (user_id, password) VALUES (?, ?);", (user_id, hashed_password))
+            db.commit()
+            return redirect(url_for("login"))
+    return render_template("register.html", form=form)
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -164,6 +171,7 @@ def login():
     return render_template("login.html", form=form)
 
 @app.route("/logout")
+@login_required
 def logout():
     session.clear()
     session.modified = True 

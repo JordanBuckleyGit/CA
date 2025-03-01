@@ -18,7 +18,7 @@ body {
     flex-direction: column;
 }
 
-/* Background Animation */
+
 @keyframes movingBackground {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -117,7 +117,7 @@ nav {
     background: #cc3700;
 }
 
-/* Hero Section with DNA-Shaped Boxes */
+
 #hero {
     flex: 1;
     display: flex;
