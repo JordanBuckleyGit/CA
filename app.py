@@ -36,7 +36,7 @@ def random_movie():
     db = get_db()
     movie = db.execute("SELECT * FROM movies ORDER BY RANDOM() LIMIT 1").fetchone()
     
-    form = ReviewForm()  # Define the form
+    form = ReviewForm()
 
     if form.validate_on_submit():
         review_text = form.review_text.data
@@ -49,7 +49,7 @@ def random_movie():
         )
         db.commit()
 
-        # Refresh page to show the new review
+
         return redirect(url_for("random_movie"))
 
     reviews = db.execute("SELECT * FROM reviews WHERE movie_id = ?", (movie["movie_id"],)).fetchall()
