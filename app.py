@@ -152,16 +152,13 @@ def edit_username():
     new_username = request.form.get("new_username")
     db = get_db()
 
-    # Check if the new username already exists
     existing_user = db.execute("SELECT * FROM users WHERE user_id = ?", (new_username,)).fetchone()
     if existing_user:
         return "Username already exists. Please choose a different one.", 400
 
-    # Update the username in the database
     db.execute("UPDATE users SET user_id = ? WHERE user_id = ?", (new_username, session["user_id"]))
     db.commit()
 
-    # Update the session with the new username
     session["user_id"] = new_username
     session.modified = True
 
@@ -216,6 +213,22 @@ def logout():
     session.clear()
     session.modified = True 
     return redirect( url_for("index"))
+
+@app.route('/user')
+@login_required
+def user():
+    db = get_db()
+    user_id = session.get("user_id")
+    
+    reviews = db.execute("""
+        SELECT reviews.*, movies.title 
+        FROM reviews 
+        JOIN movies ON reviews.movie_id = movies.movie_id 
+        WHERE reviews.user = ?
+    """, (user_id,)).fetchall()
+    
+    return render_template('user.html', reviews=reviews)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

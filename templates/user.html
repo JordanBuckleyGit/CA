@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h2>Edit Profile</h2>
+    <form action="{{ url_for('user') }}" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ session['user_id'] }}" required>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <h3>Your Reviews</h3>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <strong>Movie:</strong> {{ review.title }}<br>
+                    <strong>Review:</strong> {{ review.review_text }}<br>
+                    <strong>Rating:</strong> {{ review.rating }}/10
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't written any reviews yet.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+    
+{% endblock %}

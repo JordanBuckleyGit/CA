@@ -22,9 +22,9 @@
 const navToggle = document.getElementById('nav-toggle');
 const navLinks = document.getElementById('nav-links');
 
-navToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-});
+// navToggle.addEventListener('click', () => {
+//     navLinks.classList.toggle('active');
+// });
 
 const dnaBoxes = document.querySelectorAll('.dna-box');
 dnaBoxes.forEach(box => {
@@ -48,15 +48,26 @@ if (userIcon) {
     });
 }
 
-// function toggleDropdown() {
-//     const dropdown = document.getElementById("dropdown-menu");
-//     dropdown.classList.toggle("active");
-// }
+document.addEventListener("DOMContentLoaded", function () {
+    const userIcon = document.getElementById("user-icon");
+    const dropdownMenu = document.getElementById("dropdown-menu");
 
-// window.onclick = function(event) {
-//     const dropdown = document.getElementById("dropdown-menu");
-//     const userIcon = document.getElementById("user-icon");
-//     if (event.target !== userIcon && !dropdown.contains(event.target)) {
-//         dropdown.classList.remove("active");
-//     }
-// };
+    console.log("User Icon:", userIcon); // Debug log
+    console.log("Dropdown Menu:", dropdownMenu); // Debug log
+
+    if (userIcon && dropdownMenu) {
+        userIcon.addEventListener("click", function (event) {
+            event.stopPropagation(); // Prevent the click from bubbling up
+            dropdownMenu.classList.toggle("active");
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", function (event) {
+            if (!dropdownMenu.contains(event.target) && event.target !== userIcon) {
+                dropdownMenu.classList.remove("active");
+            }
+        });
+    } else {
+        console.error("User icon or dropdown menu not found!");
+    }
+});
