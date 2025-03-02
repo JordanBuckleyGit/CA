@@ -205,14 +205,9 @@ nav {
     font-weight: bold;
 }
 
-.my-dna-box {
-    grid-column: span 2; /* Makes "My DNA" box span 2 columns */
-    background: rgba(169, 223, 191, 0.2); /* Slightly different background */
-    border: 2px solid #FFD700; /* Gold border for emphasis */
-}
 
-.my-dna-box a {
-    font-size: 1.75rem; /* Larger font size for emphasis */
+.dna-box:last-child {
+    grid-column: span 2;
 }
 
 .footer {
