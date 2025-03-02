@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+
+<section id="welcome-container">
+    <h1>Welcome to Movie DNA</h1>
+    <p>Your Movie DNA. Choose how you'd like to search for a movie:</p>
+</section>
+
+{% if request.path == '/' %}
+<section id="hero">
+    <div id="dna-container">
+        <div class="dna-box">
+            <a href="{{ url_for('random_movie') }}">Random Movie</a>
+        </div>
+        <div class="dna-box">
+            <a href="{{ url_for('genre_search') }}">Search by Genre</a>
+        </div>
+        <div class="dna-box">
+            <a href="{{ url_for('score_search') }}">Search by Score</a>
+        </div>
+        <div class="dna-box">
+            <a href="{{ url_for('year_search') }}">Search by Year</a>
+        </div>
+        <div class="dna-box">
+            <a href="#">My DNA</a>
+        </div>
+    </div>
+</section>
+
+{% endif %}
+
+{% endblock %}
