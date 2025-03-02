@@ -15,26 +15,30 @@
     <header>
         <nav>
             <section id="nav-container">
+                <section id="nav-left">
                 <a href="/" id="home-icon">
                     <i class="fa-solid fa-house"></i>
                 </a>
                 <section id="nav-logo">
                     <a href="{{ url_for('index') }}">Movie Recommender</a>
                 </section>
+            </section>
 
                 <section id="nav-links">
                     <ul>
-                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <!-- <li><a href="{{ url_for('index') }}">Home</a></li> -->
                         <li><a href="{{ url_for('random_movie') }}">Random Movie</a></li>
                         <li><a href="{{ url_for('genre_search') }}">Search by Genre</a></li>
                         <li><a href="{{ url_for('score_search') }}">Search by Score</a></li>
                         <li><a href="{{ url_for('year_search') }}">Search by Year</a></li>
+                        <li><a href="{{ url_for('cart') }}">Watchlist</a></li>
                     </ul>
                 </section>
+                
                 <section id="nav-user">
                     {% if session['user_id'] %}
                     <section id="user-info">
-                        <span id="username">{{ session['user_id'] }}</span>
+                        <p id="username">{{ session['user_id'] }}</p>
                         <i class="fas fa-user-circle" id="user-icon"></i>
                     </section>
                     <a href="{{ url_for('logout') }}" id="logout-btn">Logout</a>
@@ -76,7 +80,7 @@
             </section>
 
             <section class="footer-bottom">
-                <p>&copy; Jordan Buckley.</p>
+                <p>&copy; Web Dev 2 (Jordan Buckley).</p>
 
                 <section class="social-icons">
                     <a aria-label="Instagram" href="https://www.instagram.com/jordanbuckley_20/" target="_blank">

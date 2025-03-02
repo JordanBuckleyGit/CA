@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+    <h1>Your Watchlist</h1>
+    {% if watchlist %}
+        <ul>
+            {% for movie_id, movie in watchlist.items() %}
+                <li>
+                    <strong>{{ movie.title }} ({{ movie.year }})</strong>
+                    - Genre: {{ movie.genre }}
+                    - Score: ⭐ {{ movie.score }}/10
+                    - Directed by {{ movie.director }}
+                    - Added: {{ movie.count }} times
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Your watchlist is empty.</p>
+    {% endif %}
+    <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+
+{% endblock %}

@@ -106,6 +106,25 @@ def year_search():
     return render_template("year.html", form=form,
                             movies=movies)
 
+@app.route("/watchlist")
+def cart():
+    if "watchlist" not in session:
+        session["watchlist"] = {}
+        session.modified = True
+    return render_template("watchlist.html", 
+                           watchlist=session["watchlist"])
+
+@app.route("/add_to_watchlist/<int:movie_id>")
+def add_to_watchlist(movie_id):
+    if "watchlist" not in session:
+        session["watchlist"] = {}
+    if movie_id not in session["watchlist"]:
+        session["watchlist"][movie_id] = 1
+    else:
+        session["watchlist"][movie_id] = session["watchlist"][movie_id] + 1
+    session.modified = True
+    return redirect(url_for("cart"))
+
 @app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
 @login_required
 def movie_details(movie_id):
