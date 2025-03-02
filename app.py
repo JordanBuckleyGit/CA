@@ -146,6 +146,27 @@ def movie_details(movie_id):
                            reviews=reviews, 
                            form=form)
 
+@app.route("/edit_username", methods=["POST"])
+@login_required
+def edit_username():
+    new_username = request.form.get("new_username")
+    db = get_db()
+
+    # Check if the new username already exists
+    existing_user = db.execute("SELECT * FROM users WHERE user_id = ?", (new_username,)).fetchone()
+    if existing_user:
+        return "Username already exists. Please choose a different one.", 400
+
+    # Update the username in the database
+    db.execute("UPDATE users SET user_id = ? WHERE user_id = ?", (new_username, session["user_id"]))
+    db.commit()
+
+    # Update the session with the new username
+    session["user_id"] = new_username
+    session.modified = True
+
+    return redirect(url_for("index"))
+
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
     form = RegistrationForm()

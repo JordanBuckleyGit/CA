@@ -47,3 +47,16 @@ if (userIcon) {
         userIcon.style.transform = 'scale(1)';
     });
 }
+
+// function toggleDropdown() {
+//     const dropdown = document.getElementById("dropdown-menu");
+//     dropdown.classList.toggle("active");
+// }
+
+// window.onclick = function(event) {
+//     const dropdown = document.getElementById("dropdown-menu");
+//     const userIcon = document.getElementById("user-icon");
+//     if (event.target !== userIcon && !dropdown.contains(event.target)) {
+//         dropdown.classList.remove("active");
+//     }
+// };
