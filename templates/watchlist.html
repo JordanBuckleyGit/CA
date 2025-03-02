@@ -14,6 +14,9 @@
                 </li>
             {% endfor %}
         </ul>
+        <a href="{{ url_for('clear_watchlist') }}" class="btn">Clear Watchlist</a>
+    </br>
+
     {% else %}
         <p>Your watchlist is empty.</p>
     {% endif %}

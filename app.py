@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, redirect, url_for, g, request
 from database import get_db, close_db
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm
+from forms import MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm
 from functools import wraps
 
 app = Flask(__name__)
@@ -116,14 +116,41 @@ def cart():
 
 @app.route("/add_to_watchlist/<int:movie_id>")
 def add_to_watchlist(movie_id):
+    db = get_db()
+    
+    movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
+    
+    if not movie:
+        return "Movie not found.", 404
+
     if "watchlist" not in session:
         session["watchlist"] = {}
+
     if movie_id not in session["watchlist"]:
-        session["watchlist"][movie_id] = 1
+        session["watchlist"][movie_id] = {
+            "title": movie["title"],
+            "year": movie["year"],
+            "genre": movie["genre"],
+            "score": movie["score"],
+            "director": movie["director"],
+            "count": 1
+        }
     else:
-        session["watchlist"][movie_id] = session["watchlist"][movie_id] + 1
+        session["watchlist"][movie_id]["count"] += 1 # will be used for the algorithm
+
     session.modified = True
-    return redirect(url_for("cart"))
+    return redirect(url_for("random_movie"))
+
+@app.route("/clear_watchlist")
+def clear_watchlist():
+
+    if "watchlist" in session:
+        session.pop("watchlist")
+        session.modified = True
+
+        return redirect(url_for("cart"))
+    else:
+        return "Your watchlist is already empty.", 404
 
 @app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
 @login_required
@@ -214,21 +241,36 @@ def logout():
     session.modified = True 
     return redirect( url_for("index"))
 
-@app.route('/user')
+@app.route('/user', methods=["GET", "POST"])
 @login_required
 def user():
     db = get_db()
     user_id = session.get("user_id")
-    
+    form = UpdateUsernameForm()
+
+    if form.validate_on_submit():
+        new_username = form.username.data
+
+        existing_user = db.execute("SELECT * FROM users WHERE user_id = ?", (new_username,)).fetchone()
+        if existing_user:
+            form.username.errors.append("Username already exists. Please choose a different one.")
+        else:
+            db.execute("UPDATE users SET user_id = ? WHERE user_id = ?", (new_username, user_id))
+            db.commit()
+
+            session["user_id"] = new_username
+            session.modified = True
+
+            return redirect(url_for("user"))
+
     reviews = db.execute("""
         SELECT reviews.*, movies.title 
         FROM reviews 
         JOIN movies ON reviews.movie_id = movies.movie_id 
         WHERE reviews.user = ?
     """, (user_id,)).fetchall()
-    
-    return render_template('user.html', reviews=reviews)
 
+    return render_template('user.html', form=form, reviews=reviews)
 
 if __name__ == "__main__":
     app.run(debug=True)

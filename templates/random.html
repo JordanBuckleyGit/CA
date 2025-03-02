@@ -8,15 +8,28 @@
         <section id="movie-container">
             <section id="movie-card">
                 <h2>{{ movie.title }} ({{ movie.year }})</h2>
-                <img src="static/images/jordan_buckley.jpg" alt="Jordan Buckley" />
+                {% if movie.image_url %}
+                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" />
+                {% else %}
+                    <img src="{{ url_for('static', filename='images/jordan_buckley.jpg') }}" alt="Default Movie Image" />
+                {% endif %}
                 <p><strong>Genre:</strong> {{ movie.genre }}</p>
                 <p><strong>Score:</strong> ⭐ {{ movie.score }}/10</p>
                 <p><strong>Director:</strong> {{ movie.director }}</p>
                 <p>{{ movie.description }}</p>
-                <p>
-                    <a href="{{ url_for('login') }}" class="btn">Add to Watchlist</a>
-                    <a href="{{ url_for('random_movie') }}" class="btn">Next</a>
-                </p>                
+
+                {% if g.user %}
+                    <p>
+                        <a href="{{ url_for('add_to_watchlist', movie_id=movie.movie_id) }}" class="btn">Add to Watchlist</a>
+                        <a href="{{ url_for('random_movie') }}" class="btn">Next</a>
+                    </p>
+                {% else %}
+                    <p>
+                        <a href="{{ url_for('login') }}" class="btn">Login to Add to Watchlist</a>
+                        <a href="{{ url_for('random_movie') }}" class="btn">Next</a>
+                    </p>
+                {% endif %}
+
             </section>
         </section>
     {% else %}

@@ -45,3 +45,6 @@ class ReviewForm(FlaskForm):
     rating = IntegerField("Rating (1-10)", validators=[InputRequired(), NumberRange(min=1, max=10)])
     submit = SubmitField("Submit Review")
 
+class UpdateUsernameForm(FlaskForm):
+    username = StringField("New Username", validators=[InputRequired()])
+    submit = SubmitField("Update Username")

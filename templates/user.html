@@ -1,28 +1,44 @@
 {% extends "base.html" %}
-
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}">
+{% endblock %}
 {% block main_content %}
-    <h2>Edit Profile</h2>
-    <form action="{{ url_for('user') }}" method="POST">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" value="{{ session['user_id'] }}" required>
+    <section id="edit-profile">
+        <h2>Edit Profile</h2>
+        <form action="{{ url_for('user') }}" method="POST">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.username.label }}<br>
+                {{ form.username(size=32, value=session['user_id'], id="username-input") }}<br>
+                {% for error in form.username.errors %}
+                    <span class="error-message">{{ error }}</span><br>
+                {% endfor %}
+            </div>
 
-        <button type="submit">Save Changes</button>
-    </form>
+            <div class="form-group">
+                {{ form.submit(id="submit-button") }}
+            </div>
+        </form>
+    </section>
 
-    <h3>Your Reviews</h3>
-    {% if reviews %}
-        <ul>
-            {% for review in reviews %}
-                <li>
-                    <strong>Movie:</strong> {{ review.title }}<br>
-                    <strong>Review:</strong> {{ review.review_text }}<br>
-                    <strong>Rating:</strong> {{ review.rating }}/10
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>You haven't written any reviews yet.</p>
-    {% endif %}
-    <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
-    
+    <section id="user-reviews">
+        <h3>Your Reviews</h3>
+        {% if reviews %}
+            <ul id="reviews-list">
+                {% for review in reviews %}
+                    <li class="review-item">
+                        <strong class="review-movie">Movie:</strong> {{ review.title }}<br>
+                        <strong class="review-text">Review:</strong> {{ review.review_text }}<br>
+                        <strong class="review-rating">Rating:</strong> {{ review.rating }}/10
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p id="no-reviews-message">You haven't written any reviews yet.</p>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+
+    </section>
 {% endblock %}

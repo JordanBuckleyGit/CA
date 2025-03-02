@@ -31,7 +31,11 @@
                         <li><a href="{{ url_for('genre_search') }}">Search by Genre</a></li>
                         <li><a href="{{ url_for('score_search') }}">Search by Score</a></li>
                         <li><a href="{{ url_for('year_search') }}">Search by Year</a></li>
-                        <li><a href="{{ url_for('cart') }}">Watchlist</a></li>
+                        <li>
+                            <a href="{{ url_for('cart') }}">
+                                <i class="fa-solid fa-bookmark"></i> Watchlist
+                            </a>
+                        </li>
                     </ul>
                 </section>
                 

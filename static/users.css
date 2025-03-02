@@ -1,0 +1,63 @@
+/* User Form Styles */
+#edit-profile {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+#edit-profile h2 {
+    color: #A9DFBF;
+    margin-bottom: 15px;
+    font-size: 2rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #A9DFBF;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #A9DFBF;
+    outline: none;
+}
+
+#submit-button {
+    background: #A9DFBF;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    width: 100%;
+}
+
+#submit-button:hover {
+    background: rgba(0, 255, 166, 0.3);
+    transform: scale(1.05);
+}
+
+.error-message {
+    color: #FF4500;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
