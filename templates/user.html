@@ -1,7 +1,9 @@
 {% extends "base.html" %}
+
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}">
 {% endblock %}
+
 {% block main_content %}
     <section id="edit-profile">
         <h2>Edit Profile</h2>
@@ -22,6 +24,42 @@
         </form>
     </section>
 
+    <section id="network">
+        <h3>Network</h3>
+        <div>
+            <h4>Followers</h4>
+            <ul>
+                {% for follower in followers %}
+                    <li>
+                        {{ follower.follower }}
+                        {% if follower.follower != session["user_id"] %}
+                            <a href="{{ url_for('follow_user', username=follower.follower) }}" class="btn">Follow</a>
+                            <a href="{{ url_for('unfollow_user', username=follower.follower) }}" class="btn">Unfollow</a>
+                        {% endif %}
+                    </li>
+                {% else %}
+                    <li>No followers yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <h4>Following</h4>
+            <ul>
+                {% for follow in following %}
+                    <li>
+                        {{ follow.following }}
+                        {% if follow.following != session["user_id"] %}
+                            <a href="{{ url_for('follow_user', username=follow.following) }}" class="btn">Follow</a>
+                            <a href="{{ url_for('unfollow_user', username=follow.following) }}" class="btn">Unfollow</a>
+                        {% endif %}
+                    </li>
+                {% else %}
+                    <li>Not following anyone yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
     <section id="user-reviews">
         <h3>Your Reviews</h3>
         {% if reviews %}
@@ -36,9 +74,9 @@
             </ul>
         {% else %}
             <p id="no-reviews-message">You haven't written any reviews yet.</p>
-        {% endif %}
-
+        {% endif %}    
         <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 
     </section>
+
 {% endblock %}

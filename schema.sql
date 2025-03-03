@@ -32,6 +32,8 @@ CREATE TABLE users (
     password TEXT NOT NULL
 );
 
+DROP TABLE IF EXISTS reviews;
+
 CREATE TABLE reviews (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     movie_id INTEGER NOT NULL,
@@ -39,4 +41,26 @@ CREATE TABLE reviews (
     review_text TEXT NOT NULL,
     rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 10),
     FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
+);
+
+DROP TABLE IF EXISTS watchlist;
+
+CREATE TABLE watchlist (
+    user_id TEXT NOT NULL,
+    movie_id INTEGER NOT NULL,
+    count INTEGER DEFAULT 1,
+    PRIMARY KEY (user_id, movie_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id)
+);
+
+
+DROP TABLE IF EXISTS network;
+
+CREATE TABLE network (
+    follower TEXT NOT NULL,
+    following TEXT NOT NULL,
+    PRIMARY KEY (follower, following),
+    FOREIGN KEY (follower) REFERENCES users(user_id),
+    FOREIGN KEY (following) REFERENCES users(user_id)
 );

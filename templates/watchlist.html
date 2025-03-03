@@ -4,22 +4,19 @@
     <h1>Your Watchlist</h1>
     {% if watchlist %}
         <ul>
-            {% for movie_id, movie in watchlist.items() %}
+            {% for movie in watchlist %}
                 <li>
                     <strong>{{ movie.title }} ({{ movie.year }})</strong>
                     - Genre: {{ movie.genre }}
                     - Score: ⭐ {{ movie.score }}/10
                     - Directed by {{ movie.director }}
-                    - Added: {{ movie.count }} times
+                    - Added: {{ movie.count }} time(s)
                 </li>
             {% endfor %}
         </ul>
         <a href="{{ url_for('clear_watchlist') }}" class="btn">Clear Watchlist</a>
-    </br>
-
     {% else %}
         <p>Your watchlist is empty.</p>
     {% endif %}
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
-
 {% endblock %}

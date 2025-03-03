@@ -107,50 +107,59 @@ def year_search():
                             movies=movies)
 
 @app.route("/watchlist")
+@login_required
 def cart():
-    if "watchlist" not in session:
-        session["watchlist"] = {}
-        session.modified = True
-    return render_template("watchlist.html", 
-                           watchlist=session["watchlist"])
+    db = get_db()
+    user_id = session["user_id"]
+
+    watchlist = db.execute("""
+        SELECT movies.*, watchlist.count 
+        FROM watchlist
+        JOIN movies ON watchlist.movie_id = movies.movie_id
+        WHERE watchlist.user_id = ?
+    """, (user_id,)).fetchall()
+
+    return render_template("watchlist.html", watchlist=watchlist)
 
 @app.route("/add_to_watchlist/<int:movie_id>")
+@login_required
 def add_to_watchlist(movie_id):
     db = get_db()
-    
+    user_id = session["user_id"]
+
     movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
-    
     if not movie:
         return "Movie not found.", 404
 
-    if "watchlist" not in session:
-        session["watchlist"] = {}
+    existing_watchlist_item = db.execute(
+        "SELECT * FROM watchlist WHERE user_id = ? AND movie_id = ?",
+        (user_id, movie_id)
+    ).fetchone()
 
-    if movie_id not in session["watchlist"]:
-        session["watchlist"][movie_id] = {
-            "title": movie["title"],
-            "year": movie["year"],
-            "genre": movie["genre"],
-            "score": movie["score"],
-            "director": movie["director"],
-            "count": 1
-        }
+    if existing_watchlist_item:
+        db.execute(
+            "UPDATE watchlist SET count = count + 1 WHERE user_id = ? AND movie_id = ?",
+            (user_id, movie_id)
+        )
     else:
-        session["watchlist"][movie_id]["count"] += 1 # will be used for the algorithm
+        db.execute(
+            "INSERT INTO watchlist (user_id, movie_id, count) VALUES (?, ?, 1)",
+            (user_id, movie_id)
+        )
 
-    session.modified = True
+    db.commit()
     return redirect(url_for("random_movie"))
 
 @app.route("/clear_watchlist")
+@login_required
 def clear_watchlist():
+    db = get_db()
+    user_id = session["user_id"]
 
-    if "watchlist" in session:
-        session.pop("watchlist")
-        session.modified = True
+    db.execute("DELETE FROM watchlist WHERE user_id = ?", (user_id,))
+    db.commit()
 
-        return redirect(url_for("cart"))
-    else:
-        return "Your watchlist is already empty.", 404
+    return redirect(url_for("cart"))
 
 @app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
 @login_required
@@ -271,6 +280,114 @@ def user():
     """, (user_id,)).fetchall()
 
     return render_template('user.html', form=form, reviews=reviews)
+
+# adding stuff
+
+# @app.route("/follow/<username>")
+# @login_required
+# def follow_user(username):
+#     db = get_db()
+#     current_user = session["user_id"]
+
+#     # Check if the user exists
+#     user_to_follow = db.execute("SELECT * FROM users WHERE user_id = ?", (username,)).fetchone()
+#     if not user_to_follow:
+#         return "User not found.", 404
+
+#     # Check if the current user is already following the target user
+#     existing_follow = db.execute(
+#         "SELECT * FROM network WHERE follower = ? AND following = ?",
+#         (current_user, username)
+#     ).fetchone()
+
+#     if existing_follow:
+#         return "You are already following this user.", 400
+
+#     # Add the follow relationship
+#     db.execute(
+#         "INSERT INTO network (follower, following) VALUES (?, ?)",
+#         (current_user, username)
+#     )
+#     db.commit()
+
+#     return redirect(url_for("user_profile", username=username))
+
+# @app.route("/unfollow/<username>")
+# @login_required
+# def unfollow_user(username):
+#     db = get_db()
+#     current_user = session["user_id"]
+
+#     # Remove the follow relationship
+#     db.execute(
+#         "DELETE FROM network WHERE follower = ? AND following = ?",
+#         (current_user, username)
+#     )
+#     db.commit()
+
+#     return redirect(url_for("user_profile", username=username))
+
+# @app.route("/user/<username>")
+# @login_required
+# def user_profile(username):
+#     db = get_db()
+
+#     # Fetch the user's details
+#     user = db.execute("SELECT * FROM users WHERE user_id = ?", (username,)).fetchone()
+#     if not user:
+#         return "User not found.", 404
+
+#     # Fetch the user's reviews
+#     reviews = db.execute("""
+#         SELECT reviews.*, movies.title 
+#         FROM reviews 
+#         JOIN movies ON reviews.movie_id = movies.movie_id 
+#         WHERE reviews.user = ?
+#     """, (username,)).fetchall()
+
+#     # Fetch followers and following
+#     followers = db.execute(
+#         "SELECT follower FROM network WHERE following = ?",
+#         (username,)
+#     ).fetchall()
+
+#     following = db.execute(
+#         "SELECT following FROM network WHERE follower = ?",
+#         (username,)
+#     ).fetchall()
+
+#     # Check if the current user is following this user
+#     is_following = db.execute(
+#         "SELECT * FROM network WHERE follower = ? AND following = ?",
+#         (session["user_id"], username)
+#     ).fetchone() is not None
+
+#     return render_template(
+#         "user_profile.html",
+#         user=user,
+#         reviews=reviews,
+#         followers=followers,
+#         following=following,
+#         is_following=is_following
+#     )
+
+# needs changing 
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return "<h1>404</h1><p>The resource could not be found. Please check if there was an error with how the link was typed up.</p>"
+
+@app.errorhandler(405)
+def handle_exception(e):
+    return "<h1>405 Method not Allowed</h1><p>The server has received the request but rejected the specific HTTP method used please try again</p>"
+
+@app.errorhandler(500)
+def handle_exception(e):
+    return "<h1>500 Internal Server Error</h1><p>The server encountered an unexpected condition that prevented it from fulfilling the request</p>"
+
+@app.errorhandler(403)
+def handle_exception(e):
+    return "<h1>403 Forbidden</h1><p>The request you have made is forbidden</p>"
 
 if __name__ == "__main__":
     app.run(debug=True)
