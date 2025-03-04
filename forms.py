@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, FloatField, IntegerField, TextAreaField, PasswordField
+from wtforms import StringField, SelectField, SubmitField, FloatField, IntegerField, TextAreaField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, NumberRange, EqualTo
 
 class MovieForm(FlaskForm):
@@ -31,6 +31,7 @@ class RegistrationForm(FlaskForm):
     password2 = PasswordField("Repeat Password:",
                     validators=[InputRequired(),
                                 EqualTo("password")])
+    is_admin = BooleanField("Is Admin")
     submit = SubmitField("Submit")
 
 class LoginForm(FlaskForm):

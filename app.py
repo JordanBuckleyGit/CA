@@ -13,9 +13,12 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# checkers 
+
 @app.before_request
 def load_logged_in_user():
-    g.user = session.get("user_id",None)
+    g.user = session.get("user_id")
+    g.is_admin = session.get("is_admin", False) 
 
 def login_required(view):
     @wraps(view)
@@ -24,6 +27,8 @@ def login_required(view):
             return(redirect(url_for("login", next=request.url)))
         return view(*args, **kwargs)
     return wrapped_view
+
+# Movie main stuff search routes
 
 @app.route("/")
 @login_required
@@ -41,7 +46,7 @@ def random_movie():
     if form.validate_on_submit():
         review_text = form.review_text.data
         rating = form.rating.data
-        user = session.get("user_id", "Anonymous")  # Use logged-in user or Anonymous
+        user = session.get("user_id", "Anonymous")
 
         db.execute(
             "INSERT INTO reviews (movie_id, user, review_text, rating) VALUES (?, ?, ?, ?)",
@@ -106,6 +111,8 @@ def year_search():
     return render_template("year.html", form=form,
                             movies=movies)
 
+# Session cart/wishlist
+
 @app.route("/watchlist")
 @login_required
 def cart():
@@ -161,6 +168,8 @@ def clear_watchlist():
 
     return redirect(url_for("cart"))
 
+# Review section
+
 @app.route("/movie/<int:movie_id>", methods=["GET", "POST"])
 @login_required
 def movie_details(movie_id):
@@ -182,73 +191,7 @@ def movie_details(movie_id):
                            reviews=reviews, 
                            form=form)
 
-@app.route("/edit_username", methods=["POST"])
-@login_required
-def edit_username():
-    new_username = request.form.get("new_username")
-    db = get_db()
-
-    existing_user = db.execute("SELECT * FROM users WHERE user_id = ?", (new_username,)).fetchone()
-    if existing_user:
-        return "Username already exists. Please choose a different one.", 400
-
-    db.execute("UPDATE users SET user_id = ? WHERE user_id = ?", (new_username, session["user_id"]))
-    db.commit()
-
-    session["user_id"] = new_username
-    session.modified = True
-
-    return redirect(url_for("index"))
-
-@app.route("/registration", methods=["GET", "POST"])
-def registration():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user_id = form.user_id.data
-        password = form.password.data
-        db = get_db()
-
-        user_in_db = db.execute("SELECT * FROM users WHERE user_id = ?;", (user_id,)).fetchone()
-        if user_in_db:
-            form.user_id.errors.append("User ID already exists! Please choose a different one.")
-        else:
-            hashed_password = generate_password_hash(password)
-            db.execute("INSERT INTO users (user_id, password) VALUES (?, ?);", (user_id, hashed_password))
-            db.commit()
-            return redirect(url_for("login"))
-    return render_template("register.html", form=form)
-
-@app.route("/login", methods=["GET","POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user_id = form.user_id.data
-        password = form.password.data
-        db = get_db()
-        user_in_db = db.execute("""
-                SELECT * FROM users
-                WHERE user_id = ?;""", (user_id,)).fetchone()
-        if user_in_db is None:
-            form.user_id.errors.append("No such user name!")
-        elif not check_password_hash (
-                user_in_db["password"],password):
-            form.password.errors.append("Incorrect password!")
-        else:
-            session.clear()
-            session["user_id"] = user_id
-            session.modified = True
-            next_page = request.args.get("next")
-            if not next_page:
-                next_page = url_for("index")
-            return redirect(next_page)
-    return render_template("login.html", form=form)
-
-@app.route("/logout")
-@login_required
-def logout():
-    session.clear()
-    session.modified = True 
-    return redirect( url_for("index"))
+# User section 
 
 @app.route('/user', methods=["GET", "POST"])
 @login_required
@@ -280,6 +223,172 @@ def user():
     """, (user_id,)).fetchall()
 
     return render_template('user.html', form=form, reviews=reviews)
+
+@app.route("/edit_username", methods=["POST"])
+@login_required
+def edit_username():
+    new_username = request.form.get("new_username")
+    db = get_db()
+
+    existing_user = db.execute("SELECT * FROM users WHERE user_id = ?", (new_username,)).fetchone()
+    if existing_user:
+        return "Username already exists. Please choose a different one.", 400
+
+    db.execute("UPDATE users SET user_id = ? WHERE user_id = ?", (new_username, session["user_id"]))
+    db.commit()
+
+    session["user_id"] = new_username
+    session.modified = True
+
+    return redirect(url_for("index"))
+
+# Login/register section
+
+@app.route("/registration", methods=["GET", "POST"])
+def registration():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        password = form.password.data
+        db = get_db()
+
+        user_in_db = db.execute("SELECT * FROM users WHERE user_id = ?;", (user_id,)).fetchone()
+        if user_in_db:
+            form.user_id.errors.append("User ID already exists! Please choose a different one.")
+        else:
+            hashed_password = generate_password_hash(password)
+            db.execute("INSERT INTO users (user_id, password) VALUES (?, ?);", (user_id, hashed_password))
+            db.commit()
+            return redirect(url_for("login"))
+    return render_template("register.html", form=form)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        password = form.password.data
+        db = get_db()
+        user_in_db = db.execute("SELECT * FROM users WHERE user_id = ?;", (user_id,)).fetchone()
+        if user_in_db is None:
+            form.user_id.errors.append("No such user name!")
+        elif not check_password_hash(user_in_db["password"], password):
+            form.password.errors.append("Incorrect password!")
+        else:
+            session.clear()
+            session["user_id"] = user_id
+            session["is_admin"] = bool(user_in_db["is_admin"])  # Store is_admin in session
+            session.modified = True
+            next_page = request.args.get("next")
+            if not next_page:
+                next_page = url_for("index")
+            return redirect(next_page)
+    return render_template("login.html", form=form)
+
+@app.route("/logout")
+@login_required
+def logout():
+    session.clear()
+    session.modified = True 
+    return redirect( url_for("index"))
+
+# admin login section
+
+@app.route("/admin/dashboard")
+@login_required
+def admin_dashboard():
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    return render_template("admin_dashboard.html")
+
+# admin movies
+
+@app.route("/admin/manage_movies")
+@login_required
+def manage_movies():
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    movies = db.execute("SELECT * FROM movies").fetchall()
+    return render_template("manage_movies.html", movies=movies)
+
+@app.route("/admin/delete_movie/<int:movie_id>")
+@login_required
+def delete_movie(movie_id):
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    db.execute("DELETE FROM movies WHERE movie_id = ?", (movie_id,))
+    db.commit()
+    return redirect(url_for("manage_movies"))
+
+@app.route("/admin/edit_movie/<int:movie_id>", methods=["GET", "POST"])
+@login_required
+def edit_movie(movie_id):
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
+    if request.method == "POST":
+        title = request.form["title"]
+        genre = request.form["genre"]
+        score = float(request.form["score"])
+        year = int(request.form["year"])
+        director = request.form["director"]
+        description = request.form["description"]
+        db.execute(
+            "UPDATE movies SET title = ?, genre = ?, score = ?, year = ?, director = ?, description = ? WHERE movie_id = ?",
+            (title, genre, score, year, director, description, movie_id)
+        )
+        db.commit()
+        return redirect(url_for("manage_movies"))
+    return render_template("edit_movie.html", movie=movie)
+
+#admin reviews
+
+@app.route("/admin/manage_reviews")
+@login_required
+def manage_reviews():
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    reviews = db.execute("""
+        SELECT reviews.*, movies.title 
+        FROM reviews 
+        JOIN movies ON reviews.movie_id = movies.movie_id
+    """).fetchall()
+    return render_template("manage_reviews.html", reviews=reviews)
+
+@app.route("/admin/delete_review/<int:review_id>")
+@login_required
+def delete_review(review_id):
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    db.execute("DELETE FROM reviews WHERE id = ?", (review_id,))
+    db.commit()
+    return redirect(url_for("manage_reviews"))
+
+# admin users
+
+@app.route("/admin/manage_users")
+@login_required
+def manage_users():
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    users = db.execute("SELECT * FROM users").fetchall()
+    return render_template("manage_users.html", users=users)
+
+@app.route("/admin/delete_user/<user_id>")
+@login_required
+def delete_user(user_id):
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    db.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+    db.commit()
+    return redirect(url_for("manage_users"))
 
 # adding stuff
 

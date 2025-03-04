@@ -61,6 +61,9 @@
                         <section id="dropdown-menu">
                             <ul>
                                 <li><a href="{{ url_for('user') }}">Edit Profile</a></li>
+                                {% if g.is_admin %}
+                                <li><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
+                                {% endif %}
                             </ul>
                         </section>
                     </section>

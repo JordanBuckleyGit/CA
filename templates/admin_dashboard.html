@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block main_content %}
+<h1>Admin Dashboard</h1>
+<ul>
+    <li><a href="{{ url_for('manage_movies') }}">Manage Movies</a></li>
+    <li><a href="{{ url_for('manage_users') }}">Manage Users</a></li>
+</ul>
+{% endblock %}
