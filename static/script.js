@@ -71,3 +71,4 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("User icon or dropdown menu not found!");
     }
 });
+

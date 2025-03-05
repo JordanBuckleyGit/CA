@@ -37,7 +37,7 @@ def index():
 
 @app.route("/search")
 def search():
-    query = request.args.get('query', '').strip()  # Get the query and remove leading/trailing spaces
+    query = request.args.get('query', '').strip() 
     filter_type = request.args.get('filter', 'all')
 
     db = get_db()
@@ -82,11 +82,9 @@ def search():
         results = cur.fetchall()
         return render_template('search.html', results=results)
     elif filter_type == 'all':
-        # Fetch all movies and group them by genre
         cur.execute("SELECT * FROM movies")
         all_movies = cur.fetchall()
 
-        # Group movies by genre
         movies_by_genre = {}
         for movie in all_movies:
             genre = movie['genre']
@@ -95,7 +93,7 @@ def search():
             movies_by_genre[genre].append(movie)
 
         return render_template('search.html', movies_by_genre=movies_by_genre)
-    else:  # Default: Search by title
+    else:
         if query:
             cur.execute("SELECT * FROM movies WHERE title LIKE ?", ('%' + query + '%',))
         else:
@@ -190,6 +188,50 @@ def year_search():
         movies = db.execute("SELECT * FROM movies WHERE year = ?", (year,)).fetchall()
     return render_template("year.html", form=form,
                             movies=movies)
+
+# DNA SECTION
+@app.route("/my-dna")
+@login_required
+def my_dna():
+    db = get_db()
+    user_id = session["user_id"]
+
+    watchlist = db.execute("""
+        SELECT movies.* 
+        FROM watchlist
+        JOIN movies ON watchlist.movie_id = movies.movie_id
+        WHERE watchlist.user_id = ?
+    """, (user_id,)).fetchall()
+
+    watchlist = [dict(movie) for movie in watchlist]
+
+    user_genres = {movie["genre"] for movie in watchlist}
+    user_min_score = min((movie["score"] for movie in watchlist), default=0)
+
+    highly_reviewed = db.execute("""
+        SELECT movies.*, AVG(reviews.rating) AS avg_rating
+        FROM movies
+        JOIN reviews ON movies.movie_id = reviews.movie_id
+        WHERE movies.genre IN ({})
+        GROUP BY movies.movie_id
+        HAVING avg_rating >= 8.0
+        ORDER BY avg_rating DESC
+    """.format(",".join("?" * len(user_genres))), tuple(user_genres)).fetchall()
+
+    highly_reviewed = [dict(movie) for movie in highly_reviewed]
+
+    unique_movies = {}
+
+    for movie in watchlist:
+        unique_movies[movie["movie_id"]] = movie
+
+    for movie in highly_reviewed:
+        if movie["movie_id"] not in unique_movies and movie["score"] >= user_min_score:
+            unique_movies[movie["movie_id"]] = movie
+
+    recommended_movies = list(unique_movies.values())
+
+    return render_template("my_dna.html", movies=recommended_movies)
 
 # Session cart/wishlist
 
@@ -489,6 +531,8 @@ def delete_user(user_id):
     return redirect(url_for("manage_users"))
 
 # adding stuff
+
+# network
 
 # @app.route("/follow/<username>")
 # @login_required
