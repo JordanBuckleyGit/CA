@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='random.css') }}">
+{% endblock %}
+
+{% block main_content %}
+    <h1>Search Results</h1>
+
+    {% if search %}
+        {% for movie in movies %}
+            <section id="movie-container">
+                <section id="movie-card">
+                    <h2>{{ movie.title }} ({{ movie.year }})</h2>
+                    {% if movie.image_url %}
+                        <img src="{{ movie.image_url }}" alt="{{ movie.title }}" />
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/jordan_buckley.jpg') }}" alt="Default Movie Image" />
+                    {% endif %}
+                    <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                    <p><strong>Score:</strong> ⭐ {{ movie.score }}/10</p>
+                    <p><strong>Director:</strong> {{ movie.director }}</p>
+                    <p>{{ movie.description }}</p>
+
+                    {% if g.user %}
+                        <p>
+                            <a href="{{ url_for('add_to_watchlist', movie_id=movie.movie_id) }}" class="btn">Add to Watchlist</a>
+                            <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Reviews</a>
+                        </p>
+                    {% else %}
+                        <p>
+                            <a href="{{ url_for('login') }}" class="btn">Login to Add to Watchlist</a>
+                            <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Reviews</a>
+                        </p>
+                    {% endif %}
+                </section>
+
+                <!-- Reviews Section -->
+                <section id="reviews-container">
+                    <h3>Reviews</h3>
+                    {% set reviews = reviews_dict.get(movie.movie_id, []) %}
+                    {% if reviews %}
+                        <ul>
+                            {% for review in reviews %}
+                                <li class="review-item">
+                                    <p><strong>{{ review.user }}</strong> rated it ⭐ {{ review.rating }}/10</p>
+                                    <p>"{{ review.review_text }}"</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No reviews yet. Be the first to review!</p>
+                    {% endif %}
+                </section>
+            </section>
+        {% endfor %}
+    {% else %}
+        <p>No movies found.</p>
+    {% endif %}
+
+    <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+{% endblock %}

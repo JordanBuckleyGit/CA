@@ -2,6 +2,10 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, FloatField, IntegerField, TextAreaField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, NumberRange, EqualTo
 
+class SearchForm(FlaskForm):
+    search = StringField("Search for a movie:", validators=[InputRequired()])
+    submit = SubmitField("Search")
+
 class MovieForm(FlaskForm):
     genre = SelectField("Genre", choices=[
         ("Sci-Fi", "Sci-Fi"),

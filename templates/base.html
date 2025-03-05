@@ -24,9 +24,24 @@
                     </section>
                 </section>
 
+                <section id="nav-search">
+                    <form action="{{ url_for('search') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search movies..." required>
+
+                        <select name="filter">
+                            <option value="all">All</option>
+                            <option value="genre">Genre</option>
+                            <option value="score">Score</option>
+                            <option value="year">Year</option>
+                            <option value="highest_reviewed">Highest Reviewed</option>
+                        </select>
+
+                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
+                </section>
+
                 <section id="nav-links">
                     <ul>
-
                         <li><a href="{{ url_for('random_movie') }}">Random Movie</a></li>
                         <li><a href="{{ url_for('genre_search') }}">Search by Genre</a></li>
                         <li><a href="{{ url_for('score_search') }}">Search by Score</a></li>
@@ -80,7 +95,7 @@
     </header>
 
     <main>
-
+        
         {% block main_content %}{% endblock %}
     </main>
 
@@ -88,7 +103,8 @@
         <section class="footer-container">
             <section class="footer-logo">
                 <h2>Movie DNA</h2>
-                <img src="static/images/jordan_buckley.jpg" alt="Jordan Buckley" />
+                <!-- https://unsplash.com/photos/grayscale-photo-of-camera-on-table-CTTJHNwbtPg -->
+                <img src="static/images/movieLogo.jpg" alt="Image Of Movie Logo" />
             </section>
 
             <section class="footer-links">

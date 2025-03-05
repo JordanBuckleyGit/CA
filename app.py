@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, redirect, url_for, g, request
 from database import get_db, close_db
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm
+from forms import SearchForm,MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm
 from functools import wraps
 
 app = Flask(__name__)
@@ -34,6 +34,44 @@ def login_required(view):
 @login_required
 def index():
     return render_template("index.html")
+
+@app.route('/search')
+def search():
+    query = request.args.get('query', '')
+    filter_type = request.args.get('filter', 'all')
+
+    db = get_db()
+    cur = db.cursor()
+
+    if filter_type == 'genre':
+        cur.execute("SELECT * FROM movies WHERE genre LIKE ?", ('%' + query + '%',))
+    elif filter_type == 'score':
+        try:
+            score_value = float(query)
+            cur.execute("SELECT * FROM movies WHERE score >= ?", (score_value,))
+        except ValueError:
+            cur.execute("SELECT * FROM movies")  # Fallback if invalid score input
+    elif filter_type == 'year':
+        try:
+            year_value = int(query)
+            cur.execute("SELECT * FROM movies WHERE year = ?", (year_value,))
+        except ValueError:
+            cur.execute("SELECT * FROM movies")  # Fallback if invalid year input
+    elif filter_type == 'highest_reviewed':
+        cur.execute("""
+            SELECT movies.*, AVG(reviews.rating) AS avg_rating
+            FROM movies
+            JOIN reviews ON movies.movie_id = reviews.movie_id
+            GROUP BY movies.movie_id
+            ORDER BY avg_rating DESC
+            LIMIT 10
+        """)
+    else:  # Default: Search by title
+        cur.execute("SELECT * FROM movies WHERE title LIKE ?", ('%' + query + '%',))
+
+    results = cur.fetchall()
+
+    return render_template('search.html', results=results)
 
 @app.route("/random", methods=["GET", "POST"])
 @login_required
@@ -379,6 +417,24 @@ def manage_users():
     db = get_db()
     users = db.execute("SELECT * FROM users").fetchall()
     return render_template("manage_users.html", users=users)
+
+@app.route("/admin/edit_user/<user_id>", methods=["GET", "POST"])
+@login_required
+def edit_user(user_id):
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    db = get_db()
+    user = db.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
+    if request.method == "POST":
+        new_user_id = request.form["user_id"]
+        is_admin = request.form.get("is_admin", False)
+        db.execute(
+            "UPDATE users SET user_id = ?, is_admin = ? WHERE user_id = ?",
+            (new_user_id, is_admin, user_id)
+        )
+        db.commit()
+        return redirect(url_for("manage_users"))
+    return render_template("edit_user.html", user=user)
 
 @app.route("/admin/delete_user/<user_id>")
 @login_required
