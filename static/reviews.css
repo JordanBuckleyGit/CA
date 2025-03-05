@@ -76,8 +76,11 @@ body {
 
 .review-stars {
     font-size: 1.3rem;
-    color: #FFD700; /* Gold Stars */
-    margin: 0.5rem 0;
+    color: #FFD700; 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    gap: 0.25rem;
 }
 
 .review-text {

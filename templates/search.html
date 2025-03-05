@@ -17,7 +17,7 @@
               <section id="movie-details">
                 <h3>{{ movie.title }}</h3>
                 <p>{{ movie.description }}</p>
-                <p><small>Score: {{ movie.score }}</small></p>
+                <p><small>Score: ⭐ {{ movie.score }}</small></p>
                 <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Details</a>
               </section>
             </article>
