@@ -3,7 +3,7 @@ from wtforms import StringField, SelectField, SubmitField, FloatField, IntegerFi
 from wtforms.validators import InputRequired, NumberRange, EqualTo
 
 class SearchForm(FlaskForm):
-    search = StringField("Search for a movie:", validators=[InputRequired()])
+    search = StringField("Search for a movie:")
     submit = SubmitField("Search")
 
 class MovieForm(FlaskForm):

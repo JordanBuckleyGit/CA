@@ -35,28 +35,41 @@ def login_required(view):
 def index():
     return render_template("index.html")
 
-@app.route('/search')
+@app.route("/search")
 def search():
-    query = request.args.get('query', '')
+    query = request.args.get('query', '').strip()  # Get the query and remove leading/trailing spaces
     filter_type = request.args.get('filter', 'all')
 
     db = get_db()
     cur = db.cursor()
 
     if filter_type == 'genre':
-        cur.execute("SELECT * FROM movies WHERE genre LIKE ?", ('%' + query + '%',))
+        if query:
+            cur.execute("SELECT * FROM movies WHERE genre LIKE ?", ('%' + query + '%',))
+        else:
+            cur.execute("SELECT * FROM movies")
+        results = cur.fetchall()
+        return render_template('search.html', results=results)
     elif filter_type == 'score':
         try:
             score_value = float(query)
             cur.execute("SELECT * FROM movies WHERE score >= ?", (score_value,))
+            results = cur.fetchall()
+            return render_template('search.html', results=results)
         except ValueError:
-            cur.execute("SELECT * FROM movies")  # Fallback if invalid score input
+            cur.execute("SELECT * FROM movies")
+            results = cur.fetchall()
+            return render_template('search.html', results=results)
     elif filter_type == 'year':
         try:
             year_value = int(query)
             cur.execute("SELECT * FROM movies WHERE year = ?", (year_value,))
+            results = cur.fetchall()
+            return render_template('search.html', results=results)
         except ValueError:
-            cur.execute("SELECT * FROM movies")  # Fallback if invalid year input
+            cur.execute("SELECT * FROM movies")
+            results = cur.fetchall()
+            return render_template('search.html', results=results)
     elif filter_type == 'highest_reviewed':
         cur.execute("""
             SELECT movies.*, AVG(reviews.rating) AS avg_rating
@@ -66,39 +79,68 @@ def search():
             ORDER BY avg_rating DESC
             LIMIT 10
         """)
+        results = cur.fetchall()
+        return render_template('search.html', results=results)
+    elif filter_type == 'all':
+        # Fetch all movies and group them by genre
+        cur.execute("SELECT * FROM movies")
+        all_movies = cur.fetchall()
+
+        # Group movies by genre
+        movies_by_genre = {}
+        for movie in all_movies:
+            genre = movie['genre']
+            if genre not in movies_by_genre:
+                movies_by_genre[genre] = []
+            movies_by_genre[genre].append(movie)
+
+        return render_template('search.html', movies_by_genre=movies_by_genre)
     else:  # Default: Search by title
-        cur.execute("SELECT * FROM movies WHERE title LIKE ?", ('%' + query + '%',))
-
-    results = cur.fetchall()
-
-    return render_template('search.html', results=results)
+        if query:
+            cur.execute("SELECT * FROM movies WHERE title LIKE ?", ('%' + query + '%',))
+        else:
+            cur.execute("SELECT * FROM movies")
+        results = cur.fetchall()
+        return render_template('search.html', results=results)
 
 @app.route("/random", methods=["GET", "POST"])
 @login_required
 def random_movie():
     db = get_db()
-    movie = db.execute("SELECT * FROM movies ORDER BY RANDOM() LIMIT 1").fetchone()
-    
     form = ReviewForm()
+
+    if request.method == "GET":
+        movie = db.execute("SELECT * FROM movies ORDER BY RANDOM() LIMIT 1").fetchone()
+        session["random_movie_id"] = movie["movie_id"]
+    else:
+        movie_id = session.get("random_movie_id")
+        if not movie_id:
+            return "Error: No movie ID found in session. Please try again.", 400
+
+        movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
+        if not movie:
+            return "Error: Movie not found. Please try again.", 404
 
     if form.validate_on_submit():
         review_text = form.review_text.data
         rating = form.rating.data
         user = session.get("user_id", "Anonymous")
 
+        movie_id = session.get("random_movie_id")
+        if not movie_id:
+            return "Error: No movie ID found in session. Please try again.", 400
+
         db.execute(
             "INSERT INTO reviews (movie_id, user, review_text, rating) VALUES (?, ?, ?, ?)",
-            (movie["movie_id"], user, review_text, rating),
+            (movie_id, user, review_text, rating),
         )
         db.commit()
-
 
         return redirect(url_for("random_movie"))
 
     reviews = db.execute("SELECT * FROM reviews WHERE movie_id = ?", (movie["movie_id"],)).fetchall()
 
     return render_template("random.html", movie=movie, reviews=reviews, form=form)
-
 
 @app.route("/recommendations", methods=["GET", "POST"])
 @login_required

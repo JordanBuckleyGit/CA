@@ -1,99 +1,146 @@
-
-.reviews-section {
-    text-align: center;
-    padding: 2rem 0;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(-45deg, #0f0f0f, #1c1c1c, #2c2c2c, #000000);
+    background-size: 400% 400%;
+    animation: movingBackground 10s ease infinite;
+    color: white;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes movingBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Review Section Styling */
+.reviews-section {
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+/* Title */
 .reviews-title {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    color: #A9DFBF;
+    text-shadow: 0px 0px 10px rgba(169, 223, 191, 0.8);
 }
 
+/* Review Container */
 .reviews-container {
     display: flex;
-    justify-content: center;
     gap: 1.5rem;
-    flex-wrap: wrap;
-    max-width: 1200px;
-    margin: auto;
+    overflow-x: auto;
+    padding: 1rem;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: #A9DFBF rgba(255, 255, 255, 0.1);
+    justify-content: center;
 }
 
 .review-card {
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 1rem;
-    padding: 1.5rem;
-    width: 30%;
-    min-width: 250px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(169, 223, 191, 0.6);
+    border-radius: 1.25rem;
+    padding: 2rem;
     text-align: center;
+    width: 320px;
+    flex: 0 0 auto;
+    scroll-snap-align: center;
+    box-shadow: 0px 4px 20px rgba(169, 223, 191, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.review-card:hover {
+    transform: translateY(-8px);
 }
 
 .review-user {
     font-size: 1.2rem;
     font-weight: bold;
+    color: white;
 }
 
 .review-stars {
-    font-size: 1.5rem;
-    color: #FFD700;
+    font-size: 1.3rem;
+    color: #FFD700; /* Gold Stars */
     margin: 0.5rem 0;
 }
 
 .review-text {
     font-size: 1rem;
-    line-height: 1.4;
+    line-height: 1.5;
+    color: #ccc;
 }
 
-.review-source {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #777;
+.review-form-section {
+    text-align: center;
+    margin-top: 2rem;
 }
 
 .review-form {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 20px;
-    margin: 2rem auto;
-    width: 70%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-form {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid #A9DFBF;
+    padding: 2rem;
+    border-radius: 1.25rem;
+    max-width: 500px;
     margin: 0 auto;
-    width: 70%;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 20px rgba(0, 255, 166, 0.2);
+    backdrop-filter: blur(12px);
 }
 
-form label {
+.review-form label {
     display: block;
-    margin-bottom: 5px;
     font-weight: bold;
+    margin: 0.8rem 0;
+    color: #A9DFBF;
 }
 
-form input, form textarea {
+/* Inputs */
+.review-form textarea,
+.review-form select,
+.review-form input[type="submit"] {
     width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-form input[type="submit"] {
-    background: #A9DFBF;
-    color: #333;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+    border-radius: 0.8rem;
     border: none;
-    cursor: pointer;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
     font-size: 1rem;
-    padding: 10px 20px;
-    border-radius: 5px;
-    transition: background 0.3s ease;
 }
 
-form input[type="submit"]:hover {
+/* Submit Button */
+.review-form input[type="submit"] {
+    background: #A9DFBF;
+    color: #1c1c1c;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.review-form input[type="submit"]:hover {
     background: #8ECBB0;
+    transform: scale(1.05);
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
 }

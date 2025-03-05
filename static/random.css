@@ -41,6 +41,8 @@ h1 {
     font-size: 2rem;
     margin-bottom: 10px;
     text-align: center;
+    color: #A9DFBF;
+    text-shadow: 0px 0px 10px rgba(169, 223, 191, 0.8);
 }
 
 #movie-card p {

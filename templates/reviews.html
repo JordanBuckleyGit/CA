@@ -1,31 +1,39 @@
-{% extends "base.html" %}
-{% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='reviews.css') }}">
-{% endblock %}
+
 {% block main_content %}
     <section class="reviews-section">
-        <h2 class="reviews-title">Reviews</h2>
+        <h2 class="reviews-title">Reviews for {{ movie.title }}</h2>
         <div class="reviews-container">
-            {% for review in reviews if review.movie_id == movie.movie_id %}
-            <div class="review-card">
+            {% for review in reviews %}
+                <article class="review-card">
                     <p class="review-user"><strong>{{ review.user }}</strong></p>
-                    <div class="review-stars">{{'⭐' * review.rating}}</div>
+                    <div class="review-stars">{{ '⭐' * review.rating }}</div>
                     <p class="review-text">{{ review.review_text }}</p>
-                    <p class="review-source">IMDB</p>
-                </div>
+                </article>
             {% else %}
                 <p>No reviews yet. Be the first to review!</p>
             {% endfor %}
         </div>
     </section>
 
-    <h2>Write a Review</h2>
-    <form method="POST" class="review-form">
-        {{ form.hidden_tag() }}
-        <label for="review_text">Review:</label>
-        {{ form.review_text() }}
-        <label for="rating">Rating (1-10):</label>
-        {{ form.rating() }}
-        {{ form.submit() }}
-    </form>
+    <section class="review-form-section">
+        <h2>Write a Review</h2>
+        <form method="POST" class="review-form">
+            {{ form.hidden_tag() }}
+            <label for="review_text">Review:</label>
+            {{ form.review_text(rows=4, cols=50) }}
+            {% for error in form.review_text.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+
+            <label for="rating">Rating (1-10):</label>
+            {{ form.rating() }}
+            {% for error in form.rating.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+
+            {{ form.submit() }}
+        </form>
+    </section>
+
 {% endblock %}
