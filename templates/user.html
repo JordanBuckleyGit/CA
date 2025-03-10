@@ -92,21 +92,25 @@
         </section>
     </section>
 
-<section id="user-reviews">
-    <h3>Your Reviews</h3>
-    {% if reviews %}
-        <ul id="reviews-list">
-            {% for review in reviews %}
-                <li class="review-item">
-                    <strong class="review-movie">Movie:</strong> {{ review.title }}<br>
-                    <strong class="review-text">Review:</strong> {{ review.review_text }}<br>
-                    <strong class="review-rating">Rating:</strong> {{ review.rating }}/10
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p id="no-reviews-message">You haven't written any reviews yet.</p>
-    {% endif %}
-</section>
+    <section id="user-reviews">
+        <h3>Your Reviews</h3>
+        <div class="carousel-container">
+            <button class="carousel-button prev" onclick="scrollReviews(-320)">&#10094;</button>
+            {% if reviews %}
+                <ul id="reviews-list">
+                    {% for review in reviews %}
+                        <li class="review-item">
+                            <strong class="review-movie">Movie:</strong> {{ review.title }}<br>
+                            <strong class="review-text">Review:</strong> {{ review.review_text }}<br>
+                            <strong class="review-rating">Rating:</strong> {{ review.rating }}/10
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p id="no-reviews-message">You haven't written any reviews yet.</p>
+            {% endif %}
+            <button class="carousel-button next" onclick="scrollReviews(320)">&#10095;</button>
+        </div>
+    </section>
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}

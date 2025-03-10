@@ -1,9 +1,9 @@
+/* General Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 
 body {
     font-family: 'Arial', sans-serif;
@@ -24,12 +24,12 @@ body {
 }
 
 /* Review Section Styling */
+/* Review Section Styling */
 .reviews-section {
     padding: 3rem 1rem;
     text-align: center;
 }
 
-/* Title */
 .reviews-title {
     font-size: 2.5rem;
     font-weight: bold;
@@ -38,22 +38,78 @@ body {
     text-shadow: 0px 0px 10px rgba(169, 223, 191, 0.8);
 }
 
-/* Review Container */
+/* Carousel Container */
+.carousel-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+/* Reviews Container */
 .reviews-container {
     display: flex;
     gap: 1.5rem;
-    justify-content: center;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 1rem;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    justify-content: flex-start; /* Default alignment */
 }
 
+/* Center content if there's only 1 or no reviews */
+.reviews-container:has(.review-card:only-of-type),
+.reviews-container:empty {
+    justify-content: center; /* Center horizontally */
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.reviews-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Carousel Buttons */
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(169, 223, 191, 0.8);
+    border: none;
+    border-radius: 50%;
+    color: #1c1c1c;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-button:hover {
+    background: rgba(169, 223, 191, 1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-button.prev {
+    left: 1rem;
+}
+
+.carousel-button.next {
+    right: 1rem;
+}
+
+/* Review Card */
 .review-card {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(169, 223, 191, 0.6);
     border-radius: 1.25rem;
     padding: 2rem;
     text-align: center;
-    width: 320px;
+    width: 300px;
     flex: 0 0 auto;
-    scroll-snap-align: center;
     box-shadow: 0px 4px 20px rgba(169, 223, 191, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
@@ -84,6 +140,7 @@ body {
     color: #ccc;
 }
 
+/* Review Form Section */
 .review-form-section {
     text-align: center;
     margin-top: 2rem;

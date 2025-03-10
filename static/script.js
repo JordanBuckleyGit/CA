@@ -72,3 +72,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
+function scrollReviews(distance) {
+    const reviewsList = document.querySelector('#reviews-list');
+    if (reviewsList) {
+        reviewsList.scrollBy({
+            left: distance,
+            behavior: 'smooth',
+        });
+    }
+}
+
+function scrollReviews(distance) {
+    const reviewsList = document.querySelector('.reviews-container');
+    console.log(reviewsList); // Check if the element is found
+    if (reviewsList) {
+        reviewsList.scrollBy({
+            left: distance,
+            behavior: 'smooth',
+        });
+    }
+}
