@@ -28,7 +28,7 @@
         <h3>Network</h3>
 
         <!-- Suggested Accounts -->
-        <div>
+        <section id="suggestion">
             <h4>Suggested Accounts</h4>
             <ul>
                 {% for user in all_users %}
@@ -47,10 +47,10 @@
                     <li>No other users found.</li>
                 {% endfor %}
             </ul>
-        </div>
+        </section>
 
         <!-- Followers -->
-        <div>
+        <section id="follower-page">
             <h4>Followers</h4>
             <ul>
                 {% for follower in followers %}
@@ -69,10 +69,10 @@
                     <li>No followers yet.</li>
                 {% endfor %}
             </ul>
-        </div>
+        </section>
 
         <!-- Following -->
-        <div>
+        <section id="network-page">
             <h4>Following</h4>
             <ul>
                 {% for follow in following %}
@@ -86,7 +86,7 @@
                     <li>Not following anyone yet.</li>
                 {% endfor %}
             </ul>
-        </div>
+        </section>
     </section>
 
     <section id="user-reviews">
