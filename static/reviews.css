@@ -42,11 +42,6 @@ body {
 .reviews-container {
     display: flex;
     gap: 1.5rem;
-    overflow-x: auto;
-    padding: 1rem;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
-    scrollbar-color: #A9DFBF rgba(255, 255, 255, 0.1);
     justify-content: center;
 }
 
