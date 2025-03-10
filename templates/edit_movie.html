@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block main_content %}
+<h1>Edit Movie</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    
+    <div>
+        {{ form.title.label }}<br>
+        {{ form.title(size=50) }}<br>
+        {% for error in form.title.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    
+    <div>
+        {{ form.genre.label }}<br>
+        {{ form.genre }}<br>
+        {% for error in form.genre.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    
+    <div>
+        {{ form.score.label }}<br>
+        {{ form.score }}<br>
+        {% for error in form.score.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    
+    <div>
+        {{ form.year.label }}<br>
+        {{ form.year }}<br>
+        {% for error in form.year.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    
+    <div>
+        {{ form.director.label }}<br>
+        {{ form.director(size=50) }}<br>
+        {% for error in form.director.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    
+    <div>
+        {{ form.description.label }}<br>
+        {{ form.description(rows=5, cols=50) }}<br>
+        {% for error in form.description.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    
+    <div>
+        {{ form.submit() }}
+    </div>
+</form>
+<a href="{{ url_for('manage_movies') }}" class="back-button">Back to Manage Movies</a>
+{% endblock %}

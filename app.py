@@ -140,17 +140,17 @@ def random_movie():
 
     return render_template("random.html", movie=movie, reviews=reviews, form=form)
 
-@app.route("/recommendations", methods=["GET", "POST"])
-@login_required
-def recommendations():
-    form = MovieForm()
-    movies = None
-    if form.validate_on_submit():
-        genre = form.genre.data
-        db = get_db()
-        movies = db.execute("SELECT * FROM movies WHERE genre = ?", (genre,)).fetchall()
-    return render_template("recommendations.html",
-                            movies=movies)
+# @app.route("/recommendations", methods=["GET", "POST"])
+# @login_required
+# def recommendations():
+#     form = MovieForm()
+#     movies = None
+#     if form.validate_on_submit():
+#         genre = form.genre.data
+#         db = get_db()
+#         movies = db.execute("SELECT * FROM movies WHERE genre = ?", (genre,)).fetchall()
+#     return render_template("recommendations.html",
+#                             movies=movies)
 
 @app.route("/genre", methods=["GET", "POST"])
 @login_required
@@ -233,7 +233,7 @@ def my_dna():
 
     return render_template("my_dna.html", movies=recommended_movies)
 
-# Session cart/wishlist
+# Session cart/watchlist
 
 @app.route("/watchlist")
 @login_required
@@ -344,7 +344,31 @@ def user():
         WHERE reviews.user = ?
     """, (user_id,)).fetchall()
 
-    return render_template('user.html', form=form, reviews=reviews)
+    all_users = db.execute("SELECT user_id FROM users").fetchall()
+
+    followers = db.execute(
+        "SELECT follower FROM network WHERE following = ?",
+        (user_id,)
+    ).fetchall()
+
+    following = db.execute(
+        "SELECT following FROM network WHERE follower = ?",
+        (user_id,)
+    ).fetchall()
+
+    follower_set = {follower["follower"] for follower in followers}
+    following_set = {follow["following"] for follow in following}
+
+    return render_template(
+        'user.html',
+            form=form,
+            reviews=reviews,
+            all_users=all_users,
+            followers=followers,
+            following=following,
+            follower_set=follower_set,
+            following_set=following_set
+    )
 
 @app.route("/edit_username", methods=["POST"])
 @login_required
@@ -449,22 +473,33 @@ def delete_movie(movie_id):
 def edit_movie(movie_id):
     if not g.is_admin:
         return "Access denied. Admins only.", 403
+    
     db = get_db()
     movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
-    if request.method == "POST":
-        title = request.form["title"]
-        genre = request.form["genre"]
-        score = float(request.form["score"])
-        year = int(request.form["year"])
-        director = request.form["director"]
-        description = request.form["description"]
+    
+    if not movie:
+        return "Movie not found.", 404
+    
+    form = MovieForm(obj=movie)
+    
+    if form.validate_on_submit():
         db.execute(
-            "UPDATE movies SET title = ?, genre = ?, score = ?, year = ?, director = ?, description = ? WHERE movie_id = ?",
-            (title, genre, score, year, director, description, movie_id)
+            """
+            UPDATE movies 
+            SET title = ?, genre = ?, score = ?, year = ?, director = ?, description = ? 
+            WHERE movie_id = ?
+            """,
+            (
+                form.title.data, form.genre.data, form.score.data, 
+                form.year.data, form.director.data, form.description.data, movie_id
+            )
         )
         db.commit()
         return redirect(url_for("manage_movies"))
-    return render_template("edit_movie.html", movie=movie)
+    
+    return render_template("edit_movie.html", form=form, movie=movie)
+
+
 
 #admin reviews
 
@@ -533,6 +568,95 @@ def delete_user(user_id):
 # adding stuff
 
 # network
+# Network (Follow/Unfollow users)
+
+@app.route("/follow/<username>")
+@login_required
+def follow_user(username):
+    db = get_db()
+    current_user = session["user_id"]
+
+    if current_user == username:
+        return "You cannot follow yourself.", 400
+
+    user_to_follow = db.execute("SELECT * FROM users WHERE user_id = ?", (username,)).fetchone()
+    if not user_to_follow:
+        return "User not found.", 404
+
+    existing_follow = db.execute(
+        "SELECT * FROM network WHERE follower = ? AND following = ?",
+        (current_user, username)
+    ).fetchone()
+
+    if existing_follow:
+        return "You are already following this user.", 400
+
+    db.execute("INSERT INTO network (follower, following) VALUES (?, ?)", (current_user, username))
+    db.commit()
+
+    return redirect(url_for("user_profile", username=username))
+
+@app.route("/unfollow/<username>")
+@login_required
+def unfollow_user(username):
+    db = get_db()
+    current_user = session["user_id"]
+
+    existing_follow = db.execute(
+        "SELECT * FROM network WHERE follower = ? AND following = ?",
+        (current_user, username)
+    ).fetchone()
+
+    if not existing_follow:
+        return "You are not following this user.", 400
+
+    db.execute("DELETE FROM network WHERE follower = ? AND following = ?", (current_user, username))
+    db.commit()
+
+    return redirect(url_for("user_profile", username=username))
+
+@app.route("/user/<username>")
+@login_required
+def user_profile(username):
+    db = get_db()
+
+    user = db.execute("SELECT * FROM users WHERE user_id = ?", (username,)).fetchone()
+    if not user:
+        return "User not found.", 404
+
+    reviews = db.execute("""
+        SELECT reviews.*, movies.title 
+        FROM reviews 
+        JOIN movies ON reviews.movie_id = movies.movie_id 
+        WHERE reviews.user = ?
+    """, (username,)).fetchall()
+
+    followers = db.execute(
+        "SELECT follower FROM network WHERE following = ?",
+        (username,)
+    ).fetchall()
+
+    following = db.execute(
+        "SELECT following FROM network WHERE follower = ?",
+        (username,)
+    ).fetchall()
+
+    is_following = db.execute(
+        "SELECT * FROM network WHERE follower = ? AND following = ?",
+        (session["user_id"], username)
+    ).fetchone() is not None
+
+    return render_template(
+        "user_profile.html",
+        user=user,
+        reviews=reviews,
+        followers=followers,
+        following=following,
+        is_following=is_following
+    )
+
+
+
 
 # @app.route("/follow/<username>")
 # @login_required
@@ -642,3 +766,32 @@ def handle_exception(e):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+# @app.route("/admin/add_movie", methods=["GET", "POST"])
+# @login_required
+# def add_movie():
+#     if not g.is_admin:
+#         return "Access denied. Admins only.", 403
+    
+#     form = MovieForm()
+    
+#     if form.validate_on_submit():
+#         db = get_db()
+#         db.execute(
+#             """
+#             INSERT INTO movies (title, genre, score, year, director, description) 
+#             VALUES (?, ?, ?, ?, ?, ?)
+#             """,
+#             (
+#                 form.title.data, form.genre.data, form.score.data, 
+#                 form.year.data, form.director.data, form.description.data
+#             )
+#         )
+#         db.commit()
+#         return redirect(url_for("manage_movies"))
+    
+#     return render_template("add_movie.html", form=form)

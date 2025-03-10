@@ -1,0 +1,30 @@
+<!-- templates/user_profile.html -->
+<h1>{{ user.user_id }}'s Profile</h1>
+
+<h2>Reviews</h2>
+<ul>
+    {% for review in reviews %}
+    <li>{{ review.title }} - {{ review.rating }}/10</li>
+    <p>{{ review.review_text }}</p>
+    {% endfor %}
+</ul>
+
+<h2>Followers</h2>
+<ul>
+    {% for follower in followers %}
+    <li>{{ follower.follower }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Following</h2>
+<ul>
+    {% for follow in following %}
+    <li>{{ follow.following }}</li>
+    {% endfor %}
+</ul>
+
+{% if not is_following %}
+    <a href="{{ url_for('follow_user', username=user.user_id) }}">Follow</a>
+{% else %}
+    <a href="{{ url_for('unfollow_user', username=user.user_id) }}">Unfollow</a>
+{% endif %}

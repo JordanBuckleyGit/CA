@@ -64,3 +64,4 @@ CREATE TABLE network (
     FOREIGN KEY (follower) REFERENCES users(user_id),
     FOREIGN KEY (following) REFERENCES users(user_id)
 );
+
