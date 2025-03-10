@@ -26,8 +26,50 @@
 
     <section id="network">
         <h3>Network</h3>
-
-        <!-- Suggested Accounts -->
+    
+        <!-- Two-column layout for Followers and Following -->
+        <div id="network-columns">
+            <!-- Followers -->
+            <section id="follower-page">
+                <h4>Followers</h4>
+                <ul>
+                    {% for follower in followers %}
+                        <li>
+                            {{ follower.follower }}
+                            {% if follower.follower != session["user_id"] %}
+                                {% if follower.follower in following_set %}
+                                    <span>(Following)</span>
+                                    <a href="{{ url_for('unfollow_user', username=follower.follower) }}" class="btn">Unfollow</a>
+                                {% else %}
+                                    <a href="{{ url_for('follow_user', username=follower.follower) }}" class="btn">Follow</a>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li>No followers yet.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+    
+            <!-- Following -->
+            <section id="network-page">
+                <h4>Following</h4>
+                <ul>
+                    {% for follow in following %}
+                        <li>
+                            {{ follow.following }}
+                            {% if follow.following != session["user_id"] %}
+                                <a href="{{ url_for('unfollow_user', username=follow.following) }}" class="btn">Unfollow</a>
+                            {% endif %}
+                        </li>
+                    {% else %}
+                        <li>Not following anyone yet.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </div>
+    
+        <!-- Suggested Accounts (centered below the columns) -->
         <section id="suggestion">
             <h4>Suggested Accounts</h4>
             <ul>
@@ -45,45 +87,6 @@
                     </li>
                 {% else %}
                     <li>No other users found.</li>
-                {% endfor %}
-            </ul>
-        </section>
-
-        <!-- Followers -->
-        <section id="follower-page">
-            <h4>Followers</h4>
-            <ul>
-                {% for follower in followers %}
-                    <li>
-                        {{ follower.follower }}
-                        {% if follower.follower != session["user_id"] %}
-                            {% if follower.follower in following_set %}
-                                <span>(Following)</span>
-                                <a href="{{ url_for('unfollow_user', username=follower.follower) }}" class="btn">Unfollow</a>
-                            {% else %}
-                                <a href="{{ url_for('follow_user', username=follower.follower) }}" class="btn">Follow</a>
-                            {% endif %}
-                        {% endif %}
-                    </li>
-                {% else %}
-                    <li>No followers yet.</li>
-                {% endfor %}
-            </ul>
-        </section>
-
-        <!-- Following -->
-        <section id="network-page">
-            <h4>Following</h4>
-            <ul>
-                {% for follow in following %}
-                    <li>
-                        {{ follow.following }}
-                        {% if follow.following != session["user_id"] %}
-                            <a href="{{ url_for('unfollow_user', username=follow.following) }}" class="btn">Unfollow</a>
-                        {% endif %}
-                    </li>
-                {% else %}
-                    <li>Not following anyone yet.</li>
                 {% endfor %}
             </ul>
         </section>
