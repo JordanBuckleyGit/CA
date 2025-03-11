@@ -2,58 +2,46 @@
 {% block main_content %}
 <h1>Edit Movie</h1>
 <form method="POST">
-    {{ form.hidden_tag() }}
-    
     <div>
-        {{ form.title.label }}<br>
-        {{ form.title(size=50) }}<br>
-        {% for error in form.title.errors %}
-            <span style="color: red;">{{ error }}</span><br>
-        {% endfor %}
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" value="{{ movie.title }}" required><br>
     </div>
     
     <div>
-        {{ form.genre.label }}<br>
-        {{ form.genre }}<br>
-        {% for error in form.genre.errors %}
-            <span style="color: red;">{{ error }}</span><br>
-        {% endfor %}
+        <label for="genre">Genre:</label><br>
+        <select id="genre" name="genre" required>
+            <option value="Sci-Fi" {% if movie.genre == "Sci-Fi" %}selected{% endif %}>Sci-Fi</option>
+            <option value="Action" {% if movie.genre == "Action" %}selected{% endif %}>Action</option>
+            <option value="Crime" {% if movie.genre == "Crime" %}selected{% endif %}>Crime</option>
+            <option value="Drama" {% if movie.genre == "Drama" %}selected{% endif %}>Drama</option>
+            <option value="Fantasy" {% if movie.genre == "Fantasy" %}selected{% endif %}>Fantasy</option>
+            <option value="Thriller" {% if movie.genre == "Thriller" %}selected{% endif %}>Thriller</option>
+            <option value="Horror" {% if movie.genre == "Horror" %}selected{% endif %}>Horror</option>
+        </select><br>
     </div>
     
     <div>
-        {{ form.score.label }}<br>
-        {{ form.score }}<br>
-        {% for error in form.score.errors %}
-            <span style="color: red;">{{ error }}</span><br>
-        {% endfor %}
+        <label for="score">Score:</label><br>
+        <input type="number" id="score" name="score" step="0.1" min="0" max="10" value="{{ movie.score }}" required><br>
     </div>
     
     <div>
-        {{ form.year.label }}<br>
-        {{ form.year }}<br>
-        {% for error in form.year.errors %}
-            <span style="color: red;">{{ error }}</span><br>
-        {% endfor %}
+        <label for="year">Year:</label><br>
+        <input type="number" id="year" name="year" min="1900" max="2100" value="{{ movie.year }}" required><br>
     </div>
     
     <div>
-        {{ form.director.label }}<br>
-        {{ form.director(size=50) }}<br>
-        {% for error in form.director.errors %}
-            <span style="color: red;">{{ error }}</span><br>
-        {% endfor %}
+        <label for="director">Director:</label><br>
+        <input type="text" id="director" name="director" value="{{ movie.director }}" required><br>
     </div>
     
     <div>
-        {{ form.description.label }}<br>
-        {{ form.description(rows=5, cols=50) }}<br>
-        {% for error in form.description.errors %}
-            <span style="color: red;">{{ error }}</span><br>
-        {% endfor %}
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="5" cols="50" required>{{ movie.description }}</textarea><br>
     </div>
     
     <div>
-        {{ form.submit() }}
+        <button type="submit">Update Movie</button>
     </div>
 </form>
 <a href="{{ url_for('manage_movies') }}" class="back-button">Back to Manage Movies</a>

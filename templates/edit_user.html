@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block main_content %}
+<h1>Edit User: {{ user.user_id }}</h1>
+<form method="POST">
+    <div>
+        <label for="new_username">New Username:</label><br>
+        <input type="text" id="new_username" name="new_username" value="{{ user.user_id }}" required><br>
+    </div>
+    
+    <div>
+        <button type="submit">Update Username</button>
+    </div>
+</form>
+<a href="{{ url_for('manage_users') }}" class="back-button">Back to Manage Users</a>
+{% endblock %}

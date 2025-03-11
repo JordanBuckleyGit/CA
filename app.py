@@ -475,31 +475,42 @@ def edit_movie(movie_id):
         return "Access denied. Admins only.", 403
     
     db = get_db()
-    movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
     
-    if not movie:
-        return "Movie not found.", 404
-    
-    form = MovieForm(obj=movie)
-    
-    if form.validate_on_submit():
+    if request.method == "POST":
+        title = request.form.get("title")
+        genre = request.form.get("genre")
+        score = request.form.get("score")
+        year = request.form.get("year")
+        director = request.form.get("director")
+        description = request.form.get("description")
+        
+        if not title or not genre or not score or not year or not director or not description:
+            return "All fields are required.", 400
+        
+        try:
+            score = float(score)
+            year = int(year)
+        except ValueError:
+            return "Invalid score or year.", 400
+        
         db.execute(
             """
             UPDATE movies 
             SET title = ?, genre = ?, score = ?, year = ?, director = ?, description = ? 
             WHERE movie_id = ?
             """,
-            (
-                form.title.data, form.genre.data, form.score.data, 
-                form.year.data, form.director.data, form.description.data, movie_id
-            )
+            (title, genre, score, year, director, description, movie_id)
         )
         db.commit()
+        
         return redirect(url_for("manage_movies"))
     
-    return render_template("edit_movie.html", form=form, movie=movie)
-
-
+    movie = db.execute("SELECT * FROM movies WHERE movie_id = ?", (movie_id,)).fetchone()
+    
+    if not movie:
+        return "Movie not found.", 404
+    
+    return render_template("edit_movie.html", movie=movie)
 
 #admin reviews
 
@@ -542,17 +553,32 @@ def manage_users():
 def edit_user(user_id):
     if not g.is_admin:
         return "Access denied. Admins only.", 403
+    
     db = get_db()
-    user = db.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
+    
     if request.method == "POST":
-        new_user_id = request.form["user_id"]
-        is_admin = request.form.get("is_admin", False)
+        new_username = request.form.get("new_username")
+        
+        if not new_username:
+            return "New username is required.", 400
+        
+        existing_user = db.execute("SELECT * FROM users WHERE user_id = ?", (new_username,)).fetchone()
+        if existing_user:
+            return "Username already exists. Please choose a different one.", 400
+        
         db.execute(
-            "UPDATE users SET user_id = ?, is_admin = ? WHERE user_id = ?",
-            (new_user_id, is_admin, user_id)
+            "UPDATE users SET user_id = ? WHERE user_id = ?",
+            (new_username, user_id)
         )
         db.commit()
+        
         return redirect(url_for("manage_users"))
+    
+    user = db.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)).fetchone()
+    
+    if not user:
+        return "User not found.", 404
+    
     return render_template("edit_user.html", user=user)
 
 @app.route("/admin/delete_user/<user_id>")
@@ -653,99 +679,6 @@ def user_profile(username):
         following=following,
         is_following=is_following
     )
-
-
-
-
-# @app.route("/follow/<username>")
-# @login_required
-# def follow_user(username):
-#     db = get_db()
-#     current_user = session["user_id"]
-
-#     # Check if the user exists
-#     user_to_follow = db.execute("SELECT * FROM users WHERE user_id = ?", (username,)).fetchone()
-#     if not user_to_follow:
-#         return "User not found.", 404
-
-#     # Check if the current user is already following the target user
-#     existing_follow = db.execute(
-#         "SELECT * FROM network WHERE follower = ? AND following = ?",
-#         (current_user, username)
-#     ).fetchone()
-
-#     if existing_follow:
-#         return "You are already following this user.", 400
-
-#     # Add the follow relationship
-#     db.execute(
-#         "INSERT INTO network (follower, following) VALUES (?, ?)",
-#         (current_user, username)
-#     )
-#     db.commit()
-
-#     return redirect(url_for("user_profile", username=username))
-
-# @app.route("/unfollow/<username>")
-# @login_required
-# def unfollow_user(username):
-#     db = get_db()
-#     current_user = session["user_id"]
-
-#     # Remove the follow relationship
-#     db.execute(
-#         "DELETE FROM network WHERE follower = ? AND following = ?",
-#         (current_user, username)
-#     )
-#     db.commit()
-
-#     return redirect(url_for("user_profile", username=username))
-
-# @app.route("/user/<username>")
-# @login_required
-# def user_profile(username):
-#     db = get_db()
-
-#     # Fetch the user's details
-#     user = db.execute("SELECT * FROM users WHERE user_id = ?", (username,)).fetchone()
-#     if not user:
-#         return "User not found.", 404
-
-#     # Fetch the user's reviews
-#     reviews = db.execute("""
-#         SELECT reviews.*, movies.title 
-#         FROM reviews 
-#         JOIN movies ON reviews.movie_id = movies.movie_id 
-#         WHERE reviews.user = ?
-#     """, (username,)).fetchall()
-
-#     # Fetch followers and following
-#     followers = db.execute(
-#         "SELECT follower FROM network WHERE following = ?",
-#         (username,)
-#     ).fetchall()
-
-#     following = db.execute(
-#         "SELECT following FROM network WHERE follower = ?",
-#         (username,)
-#     ).fetchall()
-
-#     # Check if the current user is following this user
-#     is_following = db.execute(
-#         "SELECT * FROM network WHERE follower = ? AND following = ?",
-#         (session["user_id"], username)
-#     ).fetchone() is not None
-
-#     return render_template(
-#         "user_profile.html",
-#         user=user,
-#         reviews=reviews,
-#         followers=followers,
-#         following=following,
-#         is_following=is_following
-#     )
-
-# needs changing 
 
 @app.errorhandler(404)
 def page_not_found(e):
