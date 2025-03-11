@@ -8,10 +8,8 @@
         <section id="movie-container">
             <section id="movie-card">
                 <h2>{{ movie.title }} ({{ movie.year }})</h2>
-                {% if movie.image_url %}
-                    <img src="{{ movie.image_url }}" alt="{{ movie.title }}" />
-                {% else %}
-                    <img src="{{ url_for('static', filename='images/jordan_buckley.jpg') }}" alt="Default Movie Image" />
+                {% if movie.image_path %}
+                <img src="{{ url_for('static', filename='images/' ~ movie.image_path) }}" alt="{{ movie.title }}" />
                 {% endif %}
                 <p><strong>Genre:</strong> {{ movie.genre }}</p>
                 <p><strong>Score:</strong> ⭐ {{ movie.score }}/10</p>

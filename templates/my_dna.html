@@ -9,17 +9,18 @@
   {% if movies %}
     <div class="dna-helix">
       {% for movie in movies %}
-        <div class="dna-strand {% if loop.index % 2 == 0 %}right{% else %}left{% endif %}">
-          <div class="movie-card">
-            <div class="movie-details">
-              <h3>{{ movie.title }}</h3>
-              <p>{{ movie.description }}</p>
-              <p><small>Score: {{ movie.score }}</small></p>
-              <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Details</a>
-            </div>
-          </div>
-        </div>
-      {% endfor %}
+      <div class="movie-card">
+          {% if movie.image_path %}
+              <img src="{{ url_for('static', filename='images/' ~ movie.image_path) }}" alt="{{ movie.title }}" />
+          {% endif %}
+          <h2>{{ movie.title }}</h2>
+          <p><strong>Genre:</strong> {{ movie.genre }}</p>
+          <p><strong>Score:</strong> ⭐ {{ movie.score }}/10</p>
+          <p><strong>Year:</strong> {{ movie.year }}</p>
+          <p><strong>Director:</strong> {{ movie.director }}</p>
+          <p>{{ movie.description }}</p>
+      </div>
+    {% endfor %}
     </div>
   {% else %}
     <p>No recommendations found. Add more movies to your watchlist or explore highly reviewed movies!</p>

@@ -1,23 +1,31 @@
 {% extends "base.html" %}
-{% block styles %} <!-- using this for a minimal look so no footer or nav appears on login -->
+{% block styles %}
+<!-- using this for a minimal look so no footer or nav appears on login -->
 <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
 {% endblock %}
 {% block main_content %}
-  <h1>Search Results</h1>
+  <header>
+    <h1>Search Results</h1>
+  </header>
 
   {% if movies_by_genre %}
     <!-- Display movies grouped by genre -->
     {% for genre, movies in movies_by_genre.items() %}
-      <section id="genre-section">
+      <section id="genre-{{ genre | lower | replace(' ', '-') }}">
         <h2>{{ genre }}</h2>
-        <section id="movie-grid">
+        <section id="movie-grid-{{ genre | lower | replace(' ', '-') }}" class="movie-grid">
           {% for movie in movies %}
-            <article id="movie-card">
-              <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
-              <section id="movie-details">
+            <article id="movie-{{ movie.movie_id }}" class="movie-card">
+              {% if movie.image_path %}
+                <img src="{{ url_for('static', filename='images/' ~ movie.image_path) }}" alt="{{ movie.title }}" />
+              {% endif %}
+              <section class="movie-details">
                 <h3>{{ movie.title }}</h3>
+                <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                <p><strong>Score:</strong> ⭐ {{ movie.score }}/10</p>
+                <p><strong>Year:</strong> {{ movie.year }}</p>
+                <p><strong>Director:</strong> {{ movie.director }}</p>
                 <p>{{ movie.description }}</p>
-                <p><small>Score: ⭐ {{ movie.score }}</small></p>
                 <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Details</a>
               </section>
             </article>
@@ -28,11 +36,13 @@
   {% else %}
     <!-- Display regular search results -->
     {% if results %}
-      <section id="movie-grid">
+      <section id="movie-grid" class="movie-grid">
         {% for movie in results %}
-          <article id="movie-card">
-            <img src="{{ movie.image_url }}" alt="{{ movie.title }}">
-            <section id="movie-details">
+          <article id="movie-{{ movie.movie_id }}" class="movie-card">
+            {% if movie.image_url %}
+              <img src="{{ movie.image_url }}" alt="{{ movie.title }}" />
+            {% endif %}
+            <section class="movie-details">
               <h3>{{ movie.title }}</h3>
               <p>{{ movie.description }}</p>
               <p><small>Score: {{ movie.score }}</small></p>

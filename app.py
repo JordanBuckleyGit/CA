@@ -5,7 +5,6 @@ from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import SearchForm,MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm, MovieSuggestionForm
 from functools import wraps
-from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
@@ -13,7 +12,7 @@ app.teardown_appcontext(close_db)
 app.config["SECRET_KEY"] = "jordansPw"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["UPLOAD_FOLDER"] = "static/uploads"
+app.config["UPLOAD_FOLDER"] = "static/images"
 app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg"}
 Session(app)
 
@@ -534,7 +533,6 @@ def delete_review(review_id):
     
     db = get_db()
     
-    # Delete the review from the database
     db.execute("DELETE FROM reviews WHERE id = ?", (review_id,))
     db.commit()
     
@@ -692,13 +690,12 @@ def suggest_movie():
     if form.validate_on_submit():
         image = form.image.data
         if image and allowed_file(image.filename):
-            filename = secure_filename(image.filename)
-            image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-            image.save(image_path)
+            filename = form.title.data.replace(" ", "_") + ".jpg"
+            image.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], filename))
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         else:
             return redirect(url_for("suggest_movie"))
         
-        # Save movie suggestion to the database
         db = get_db()
         db.execute(
             """
@@ -725,6 +722,58 @@ def view_movie_suggestions():
     suggestions = db.execute("SELECT * FROM movie_suggestions WHERE status = 'pending'").fetchall()
     
     return render_template("view_suggestions.html", suggestions=suggestions)
+
+@app.route("/admin/accept_suggestion/<int:suggestion_id>")
+@login_required
+def accept_suggestion(suggestion_id):
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    
+    db = get_db()
+    
+    suggestion = db.execute("SELECT * FROM movie_suggestions WHERE id = ?", (suggestion_id,)).fetchone()
+    if not suggestion:
+        return "Suggestion not found.", 404
+    
+    image_path = suggestion["image_path"]
+    if image_path.startswith("images/"):
+        image_path = image_path.replace("images/", "") 
+    
+    db.execute(
+        """
+        INSERT INTO movies (title, genre, score, year, director, description, image_path)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            suggestion["title"], suggestion["genre"], 0, suggestion["year"], 
+            suggestion["director"], suggestion["description"], image_path
+        )
+    )
+    
+    db.execute("UPDATE movie_suggestions SET status = 'accepted' WHERE id = ?", (suggestion_id,))
+    
+    db.commit()
+    
+    return redirect(url_for("view_movie_suggestions"))
+
+
+@app.route("/admin/reject_suggestion/<int:suggestion_id>")
+@login_required
+def reject_suggestion(suggestion_id):
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    
+    db = get_db()
+    
+    suggestion = db.execute("SELECT * FROM movie_suggestions WHERE id = ?", (suggestion_id,)).fetchone()
+    if not suggestion:
+        return "Suggestion not found.", 404
+    
+    db.execute("UPDATE movie_suggestions SET status = 'rejected' WHERE id = ?", (suggestion_id,))
+    
+    db.commit()
+    
+    return redirect(url_for("view_movie_suggestions"))
 
 @app.errorhandler(404)
 def page_not_found(e):

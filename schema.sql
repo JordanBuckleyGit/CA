@@ -25,6 +25,7 @@ INSERT INTO movies (title, genre, score, year, director, description) VALUES
     ('The Lord of the Rings: The Return of the King', 'Fantasy', 8.9, 2003, 'Peter Jackson', 'Gandalf and Aragorn lead the World of Men against Saurons army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.'),
     ('Gladiator', 'Action', 8.5, 2000, 'Ridley Scott', 'A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery.');
 
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -76,6 +77,8 @@ CREATE TABLE movie_suggestions (
     director TEXT NOT NULL,
     description TEXT NOT NULL,
     image_path TEXT,
-    status TEXT DEFAULT 'pending',
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+
+UPDATE movies SET image_path = 'Dead_Poets_Society.jpg' WHERE title = 'Dead Poets Society';
