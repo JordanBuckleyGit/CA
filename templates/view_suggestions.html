@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block main_content %}
+<h1>Movie Suggestions</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Director</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>Submitted By</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for suggestion in suggestions %}
+            <tr>
+                <td>{{ suggestion.title }}</td>
+                <td>{{ suggestion.genre }}</td>
+                <td>{{ suggestion.year }}</td>
+                <td>{{ suggestion.director }}</td>
+                <td>{{ suggestion.description }}</td>
+                <td>
+                    {% if suggestion.image_path %}
+                        <img src="{{ url_for('static', filename=suggestion.image_path.replace('static/', '')) }}" alt="{{ suggestion.title }}" width="100">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>{{ suggestion.user_id }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Admin Dashboard</a>
+{% endblock %}

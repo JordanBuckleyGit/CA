@@ -65,3 +65,17 @@ CREATE TABLE network (
     FOREIGN KEY (following) REFERENCES users(user_id)
 );
 
+DROP TABLE IF EXISTS movie_suggestions;
+
+CREATE TABLE movie_suggestions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    genre TEXT NOT NULL,
+    year INTEGER NOT NULL,
+    director TEXT NOT NULL,
+    description TEXT NOT NULL,
+    image_path TEXT,
+    status TEXT DEFAULT 'pending',
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);

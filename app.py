@@ -3,14 +3,18 @@ from flask import Flask, render_template, session, redirect, url_for, g, request
 from database import get_db, close_db
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import SearchForm,MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm
+from forms import SearchForm,MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm, MovieSuggestionForm
 from functools import wraps
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 app.teardown_appcontext(close_db)
 app.config["SECRET_KEY"] = "jordansPw"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["UPLOAD_FOLDER"] = "static/uploads"
+app.config["ALLOWED_EXTENSIONS"] = {"png", "jpg"}
 Session(app)
 
 # checkers 
@@ -28,6 +32,9 @@ def login_required(view):
         return view(*args, **kwargs)
     return wrapped_view
 
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in app.config["ALLOWED_EXTENSIONS"]
+
 # Movie main stuff search routes
 
 @app.route("/")
@@ -39,6 +46,7 @@ def index():
 def search():
     query = request.args.get('query', '').strip() 
     filter_type = request.args.get('filter', 'all')
+    # allows for all movies to show if nothing is typed in
 
     db = get_db()
     cur = db.cursor()
@@ -139,18 +147,6 @@ def random_movie():
     reviews = db.execute("SELECT * FROM reviews WHERE movie_id = ?", (movie["movie_id"],)).fetchall()
 
     return render_template("random.html", movie=movie, reviews=reviews, form=form)
-
-# @app.route("/recommendations", methods=["GET", "POST"])
-# @login_required
-# def recommendations():
-#     form = MovieForm()
-#     movies = None
-#     if form.validate_on_submit():
-#         genre = form.genre.data
-#         db = get_db()
-#         movies = db.execute("SELECT * FROM movies WHERE genre = ?", (genre,)).fetchall()
-#     return render_template("recommendations.html",
-#                             movies=movies)
 
 @app.route("/genre", methods=["GET", "POST"])
 @login_required
@@ -598,7 +594,6 @@ def delete_user(user_id):
     db.commit()
     return redirect(url_for("manage_users"))
 
-# adding stuff
 
 # network (follow/unfollow users)
 
@@ -686,6 +681,50 @@ def user_profile(username):
         following=following,
         is_following=is_following
     )
+
+# user suggestions
+
+@app.route("/suggest_movie", methods=["GET", "POST"])
+@login_required
+def suggest_movie():
+    form = MovieSuggestionForm()
+    
+    if form.validate_on_submit():
+        image = form.image.data
+        if image and allowed_file(image.filename):
+            filename = secure_filename(image.filename)
+            image_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+            image.save(image_path)
+        else:
+            return redirect(url_for("suggest_movie"))
+        
+        # Save movie suggestion to the database
+        db = get_db()
+        db.execute(
+            """
+            INSERT INTO movie_suggestions (user_id, title, genre, year, director, description, image_path)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (session["user_id"], form.title.data, form.genre.data, form.year.data, form.director.data, form.description.data, image_path)
+        )
+        db.commit()
+        
+        return redirect(url_for("index"))
+    
+    return render_template("suggest_movie.html", form=form)
+
+# admin check suggestion
+
+@app.route("/admin/movie_suggestions")
+@login_required
+def view_movie_suggestions():
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    
+    db = get_db()
+    suggestions = db.execute("SELECT * FROM movie_suggestions WHERE status = 'pending'").fetchall()
+    
+    return render_template("view_suggestions.html", suggestions=suggestions)
 
 @app.errorhandler(404)
 def page_not_found(e):

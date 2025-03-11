@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, FloatField, IntegerField, TextAreaField, PasswordField, BooleanField
+from wtforms import StringField, SelectField, SubmitField, FloatField, IntegerField, TextAreaField, PasswordField, BooleanField, FileField
 from wtforms.validators import InputRequired, NumberRange, EqualTo
 
 class SearchForm(FlaskForm):
@@ -53,3 +53,20 @@ class ReviewForm(FlaskForm):
 class UpdateUsernameForm(FlaskForm):
     username = StringField("New Username", validators=[InputRequired()])
     submit = SubmitField("Update Username")
+
+class MovieSuggestionForm(FlaskForm):
+    title = StringField("Title", validators=[InputRequired()])
+    genre = SelectField("Genre", choices=[
+        ("Sci-Fi", "Sci-Fi"),
+        ("Action", "Action"),
+        ("Crime", "Crime"),
+        ("Drama", "Drama"),
+        ("Fantasy", "Fantasy"),
+        ("Thriller", "Thriller"),
+        ("Horror", "Horror")
+    ], validators=[InputRequired()])
+    year = IntegerField("Year", validators=[InputRequired(), NumberRange(min=1900, max=2100)])
+    director = StringField("Director", validators=[InputRequired()])
+    description = TextAreaField("Description", validators=[InputRequired()])
+    image = FileField("Movie Image", validators=[InputRequired()])
+    submit = SubmitField("Submit Suggestion")

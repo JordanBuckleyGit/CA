@@ -4,9 +4,9 @@
 {% endblock %}
 {% block main_content %}
 
-    <section id="login-section"> <!-- Reusing the same ID as login -->
+    <section id="login-section">
         <h1>Register</h1>
-        <form id="login-form" action="" method="post" novalidate> <!-- Reusing the same ID as login -->
+        <form id="login-form" action="" method="post" novalidate>
             {{ form.hidden_tag() }}
 
             <label for="user_id">{{ form.user_id.label }}</label>
