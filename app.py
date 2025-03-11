@@ -567,8 +567,7 @@ def delete_user(user_id):
 
 # adding stuff
 
-# network
-# Network (Follow/Unfollow users)
+# network (follow/unfollow users)
 
 @app.route("/follow/<username>")
 @login_required
