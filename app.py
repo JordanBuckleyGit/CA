@@ -691,18 +691,22 @@ def suggest_movie():
         image = form.image.data
         if image and allowed_file(image.filename):
             filename = form.title.data.replace(" ", "_") + ".jpg"
-            image.save(os.path.join(os.path.abspath(os.path.dirname(__file__)), app.config['UPLOAD_FOLDER'], filename))
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_path = os.path.join('images', filename)
         else:
-            return redirect(url_for("suggest_movie"))
+            image_path = None
         
         db = get_db()
+        
         db.execute(
             """
             INSERT INTO movie_suggestions (user_id, title, genre, year, director, description, image_path)
             VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (session["user_id"], form.title.data, form.genre.data, form.year.data, form.director.data, form.description.data, image_path)
+            (
+                session["user_id"], form.title.data, form.genre.data, form.year.data, 
+                form.director.data, form.description.data, image_path
+            )
         )
         db.commit()
         
@@ -719,7 +723,7 @@ def view_movie_suggestions():
         return "Access denied. Admins only.", 403
     
     db = get_db()
-    suggestions = db.execute("SELECT * FROM movie_suggestions WHERE status = 'pending'").fetchall()
+    suggestions = db.execute("SELECT * FROM movie_suggestions").fetchall()
     
     return render_template("view_suggestions.html", suggestions=suggestions)
 
@@ -735,10 +739,6 @@ def accept_suggestion(suggestion_id):
     if not suggestion:
         return "Suggestion not found.", 404
     
-    image_path = suggestion["image_path"]
-    if image_path.startswith("images/"):
-        image_path = image_path.replace("images/", "") 
-    
     db.execute(
         """
         INSERT INTO movies (title, genre, score, year, director, description, image_path)
@@ -746,11 +746,11 @@ def accept_suggestion(suggestion_id):
         """,
         (
             suggestion["title"], suggestion["genre"], 0, suggestion["year"], 
-            suggestion["director"], suggestion["description"], image_path
+            suggestion["director"], suggestion["description"], suggestion["image_path"]
         )
     )
     
-    db.execute("UPDATE movie_suggestions SET status = 'accepted' WHERE id = ?", (suggestion_id,))
+    db.execute("DELETE FROM movie_suggestions WHERE id = ?", (suggestion_id,))
     
     db.commit()
     
@@ -769,7 +769,7 @@ def reject_suggestion(suggestion_id):
     if not suggestion:
         return "Suggestion not found.", 404
     
-    db.execute("UPDATE movie_suggestions SET status = 'rejected' WHERE id = ?", (suggestion_id,))
+    db.execute("DELETE FROM movie_suggestions WHERE id = ?", (suggestion_id,))
     
     db.commit()
     

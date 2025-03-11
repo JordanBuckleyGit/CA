@@ -65,6 +65,7 @@ class MovieSuggestionForm(FlaskForm):
         ("Thriller", "Thriller"),
         ("Horror", "Horror")
     ], validators=[InputRequired()])
+    score = FloatField("Score", validators=[InputRequired(), NumberRange(min=0, max=10)])
     year = IntegerField("Year", validators=[InputRequired(), NumberRange(min=1900, max=2100)])
     director = StringField("Director", validators=[InputRequired()])
     description = TextAreaField("Description", validators=[InputRequired()])

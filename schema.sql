@@ -66,13 +66,12 @@ CREATE TABLE network (
     FOREIGN KEY (following) REFERENCES users(user_id)
 );
 
-DROP TABLE IF EXISTS movie_suggestions;
-
 CREATE TABLE movie_suggestions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL,
     title TEXT NOT NULL,
     genre TEXT NOT NULL,
+    score FLOAT,
     year INTEGER NOT NULL,
     director TEXT NOT NULL,
     description TEXT NOT NULL,
@@ -80,5 +79,3 @@ CREATE TABLE movie_suggestions (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-
-UPDATE movies SET image_path = 'Dead_Poets_Society.jpg' WHERE title = 'Dead Poets Society';

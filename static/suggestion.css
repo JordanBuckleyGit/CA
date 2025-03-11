@@ -1,0 +1,90 @@
+#suggestion-container {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #A9DFBF;
+    border-radius: 1.25rem;
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    margin: 2rem auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#suggestion-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 166, 0.3);
+}
+
+/* Heading */
+#suggestion-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #A9DFBF;
+}
+
+/* Form Sections */
+#suggestion-container section {
+    margin-bottom: 1.5rem;
+}
+
+#suggestion-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #A9DFBF;
+}
+
+#suggestion-container input,
+#suggestion-container textarea,
+#suggestion-container select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #A9DFBF;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+#suggestion-container input:focus,
+#suggestion-container textarea:focus,
+#suggestion-container select:focus {
+    border-color: #A9DFBF;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+}
+
+#suggestion-container input[type="file"] {
+    padding: 0.5rem;
+}
+
+/* Submit Button */
+#suggestion-container button {
+    background: #A9DFBF;
+    color: #333;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#suggestion-container button:hover {
+    background: #8ECBB0;
+    transform: scale(1.05);
+}
+
+/* Error Messages */
+#suggestion-container .errors {
+    color: #FF4500;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#suggestion-container .errors li {
+    margin-bottom: 0.25rem;
+}
