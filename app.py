@@ -519,12 +519,15 @@ def edit_movie(movie_id):
 def manage_reviews():
     if not g.is_admin:
         return "Access denied. Admins only.", 403
+    
     db = get_db()
+    
     reviews = db.execute("""
         SELECT reviews.*, movies.title 
         FROM reviews 
         JOIN movies ON reviews.movie_id = movies.movie_id
     """).fetchall()
+    
     return render_template("manage_reviews.html", reviews=reviews)
 
 @app.route("/admin/delete_review/<int:review_id>")
@@ -532,9 +535,13 @@ def manage_reviews():
 def delete_review(review_id):
     if not g.is_admin:
         return "Access denied. Admins only.", 403
+    
     db = get_db()
+    
+    # Delete the review from the database
     db.execute("DELETE FROM reviews WHERE id = ?", (review_id,))
     db.commit()
+    
     return redirect(url_for("manage_reviews"))
 
 # admin users

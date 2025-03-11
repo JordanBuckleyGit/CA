@@ -4,28 +4,26 @@
 <table>
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Score</th>
-            <th>Year</th>
+            <th>Movie Title</th>
+            <th>User</th>
+            <th>Review Text</th>
+            <th>Rating</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for review in reviews %}
-        <tr>
-            <td>{{ movie.title }}</td>
-            <td>{{ movie.genre }}</td>
-            <td>{{ movie.score }}</td>
-            <td>{{ movie.year }}</td>
-            <td>
-                <a href="{{ url_for('edit_movie', movie_id=movie.movie_id) }}">Edit</a>
-                <a href="{{ url_for('delete_movie', movie_id=movie.movie_id) }}">Delete</a>
-            </td>
-        </tr>
+            <tr>
+                <td>{{ review.title }}</td>
+                <td>{{ review.user }}</td>
+                <td>{{ review.review_text }}</td>
+                <td>{{ review.rating }}</td>
+                <td>
+                    <a href="{{ url_for('delete_review', review_id=review.id) }}" class="delete-button">Delete</a>
+                </td>
+            </tr>
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Dashboard</a>
-
+<a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Admin Dashboard</a>
 {% endblock %}
