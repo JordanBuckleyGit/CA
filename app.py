@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, redirect, url_for, g, request
 from database import get_db, close_db
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import SearchForm,MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm, MovieSuggestionForm
+from forms import SearchForm,MovieForm, ScoreForm, YearForm, RegistrationForm, LoginForm, ReviewForm, UpdateUsernameForm, MovieSuggestionForm, TicketForm, AdminResponseForm
 from functools import wraps
 import os
 
@@ -45,7 +45,6 @@ def index():
 def search():
     query = request.args.get('query', '').strip() 
     filter_type = request.args.get('filter', 'all')
-    # allows for all movies to show if nothing is typed in
 
     db = get_db()
     cur = db.cursor()
@@ -89,17 +88,23 @@ def search():
         results = cur.fetchall()
         return render_template('search.html', results=results)
     elif filter_type == 'all':
-        cur.execute("SELECT * FROM movies")
-        all_movies = cur.fetchall()
+        if query:
+            cur.execute("SELECT * FROM movies WHERE title LIKE ?", ('%' + query + '%',))
+            results = cur.fetchall()
+            return render_template('search.html', results=results)
+        else:
+            cur.execute("SELECT * FROM movies")
+            all_movies = cur.fetchall()
 
-        movies_by_genre = {}
-        for movie in all_movies:
-            genre = movie['genre']
-            if genre not in movies_by_genre:
-                movies_by_genre[genre] = []
-            movies_by_genre[genre].append(movie)
+            movies_by_genre = {}
+            for movie in all_movies:
+                genre = movie['genre']
+                if genre not in movies_by_genre:
+                    movies_by_genre[genre] = []
+                movies_by_genre[genre].append(movie)
 
-        return render_template('search.html', movies_by_genre=movies_by_genre)
+            return render_template('search.html', movies_by_genre=movies_by_genre)
+
     else:
         if query:
             cur.execute("SELECT * FROM movies WHERE title LIKE ?", ('%' + query + '%',))
@@ -272,7 +277,7 @@ def add_to_watchlist(movie_id):
         )
 
     db.commit()
-    return redirect(url_for("random_movie"))
+    return redirect(request.referrer)
 
 @app.route("/clear_watchlist")
 @login_required
@@ -452,6 +457,40 @@ def manage_movies():
     db = get_db()
     movies = db.execute("SELECT * FROM movies").fetchall()
     return render_template("manage_movies.html", movies=movies)
+@app.route("/admin/add_movie", methods=["GET", "POST"])
+
+@login_required
+def add_movie():
+    if not g.is_admin:
+        return "Access denied. Admins only.", 403
+    
+    form = MovieSuggestionForm()
+    
+    if form.validate_on_submit():
+        image = form.image.data
+        if image and allowed_file(image.filename):
+            filename = form.title.data.replace(" ", "_") + ".jpg"
+            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            image_path = filename
+        else:
+            image_path = None
+        
+        db = get_db()
+        db.execute(
+            """
+            INSERT INTO movies (title, genre, score, year, director, description, image_path)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                form.title.data, form.genre.data, form.score.data, form.year.data,
+                form.director.data, form.description.data, image_path
+            )
+        )
+        db.commit()
+        
+        return redirect(url_for("manage_movies"))
+    
+    return render_template("add_movie.html", form=form)
 
 @app.route("/admin/delete_movie/<int:movie_id>")
 @login_required
@@ -777,7 +816,54 @@ def reject_suggestion(suggestion_id):
 
 # more ideas here please
 
-# weekly movie suggestion 
+# ticket form
+
+@app.route("/submit_ticket", methods=["GET", "POST"])
+def submit_ticket():
+    form = TicketForm()
+
+    db = get_db()
+    
+    if form.validate_on_submit():
+        question = form.question.data
+        user_id = session.get('user_id') 
+        
+        db.execute("INSERT INTO tickets (user_id, question) VALUES (?, ?)", (user_id, question))
+        db.commit()
+        
+        return redirect(url_for("submit_ticket"))
+    
+    tickets = db.execute("SELECT * FROM tickets").fetchall()
+
+    return render_template("submit_ticket.html", form=form, tickets=tickets)
+
+
+# admin ticket response
+
+@app.route("/admin_tickets", methods=["GET", "POST"])
+def admin_tickets():
+    db = get_db()
+    
+    tickets = db.execute("SELECT * FROM tickets WHERE is_responded = 0").fetchall()
+
+    if request.method == "POST":
+        ticket_id = request.form.get("ticket_id")
+        response = request.form.get("response")
+        
+        if ticket_id and response:
+            db.execute("UPDATE tickets SET response = ?, is_responded = 1 WHERE id = ?", (response, ticket_id))
+            db.commit()
+            
+            return redirect(url_for("admin_tickets"))
+    
+    return render_template("admin_tickets.html", tickets=tickets)
+
+
+# page for references
+
+@app.route("/references", methods=["GET","POST"])
+def references():
+    return render_template("references.html")
 
 
 @app.errorhandler(404)
@@ -799,31 +885,4 @@ def handle_exception(e):
 if __name__ == "__main__":
     app.run(debug=True)
 
-
-
-
-
-# @app.route("/admin/add_movie", methods=["GET", "POST"])
-# @login_required
-# def add_movie():
-#     if not g.is_admin:
-#         return "Access denied. Admins only.", 403
     
-#     form = MovieForm()
-    
-#     if form.validate_on_submit():
-#         db = get_db()
-#         db.execute(
-#             """
-#             INSERT INTO movies (title, genre, score, year, director, description) 
-#             VALUES (?, ?, ?, ?, ?, ?)
-#             """,
-#             (
-#                 form.title.data, form.genre.data, form.score.data, 
-#                 form.year.data, form.director.data, form.description.data
-#             )
-#         )
-#         db.commit()
-#         return redirect(url_for("manage_movies"))
-    
-#     return render_template("add_movie.html", form=form)

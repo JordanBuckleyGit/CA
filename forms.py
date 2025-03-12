@@ -73,3 +73,11 @@ class MovieSuggestionForm(FlaskForm):
     description = TextAreaField("Description", validators=[InputRequired()])
     image = FileField("Movie Image", validators=[InputRequired()])
     submit = SubmitField("Submit Suggestion")
+
+class TicketForm(FlaskForm):
+    question = TextAreaField("Your Question", validators=[InputRequired()])
+    submit = SubmitField("Submit Ticket")
+
+class AdminResponseForm(FlaskForm):
+    response = TextAreaField("Admin Response", validators=[InputRequired()])
+    submit = SubmitField("Submit Response")

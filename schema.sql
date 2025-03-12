@@ -81,9 +81,14 @@ CREATE TABLE movie_suggestions (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-DROP TABLE IF EXISTS newsletter_subscribers;
 
-CREATE TABLE newsletter_subscribers (
+DROP TABLE IF EXISTS tickets;
+
+CREATE TABLE tickets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT NOT NULL UNIQUE
+    user_id TEXT NOT NULL, 
+    question TEXT NOT NULL,
+    response TEXT, 
+    is_responded BOOLEAN DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

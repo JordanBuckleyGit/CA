@@ -8,7 +8,8 @@
     <h1>Search Results</h1>
   </header>
 
-  {% if movies_by_genre %}
+  {% if movies_by_genre and not query %}
+    <!-- Display movies grouped by genre (only when no query is provided) -->
     {% for genre, movies in movies_by_genre.items() %}
       <section id="genre-{{ genre | lower | replace(' ', '-') }}">
         <h2>{{ genre }}</h2>
@@ -25,7 +26,8 @@
                 <p><strong>Year:</strong> {{ movie.year }}</p>
                 <p><strong>Director:</strong> {{ movie.director }}</p>
                 <p>{{ movie.description }}</p>
-                <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Details</a>
+                <a href="{{ url_for('add_to_watchlist', movie_id=movie.movie_id) }}" class="btn">Add to Watchlist</a>
+                <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Reviews</a>
               </section>
             </article>
           {% endfor %}
@@ -33,19 +35,23 @@
       </section>
     {% endfor %}
   {% else %}
-    <!-- displays regular search results -->
+    <!-- Display regular search results (for title, genre, score, year, etc.) -->
     {% if results %}
       <section id="movie-grid" class="movie-grid">
         {% for movie in results %}
           <article id="movie-{{ movie.movie_id }}" class="movie-card">
-            {% if movie.image_url %}
-              <img src="{{ movie.image_url }}" alt="{{ movie.title }}" />
+            {% if movie.image_path %}
+              <img src="{{ url_for('static', filename='images/' ~ movie.image_path) }}" alt="{{ movie.title }}" />
             {% endif %}
             <section class="movie-details">
               <h3>{{ movie.title }}</h3>
+              <p><strong>Genre:</strong> {{ movie.genre }}</p>
+              <p><strong>Score:</strong> ⭐ {{ movie.score }}/10</p>
+              <p><strong>Year:</strong> {{ movie.year }}</p>
+              <p><strong>Director:</strong> {{ movie.director }}</p>
               <p>{{ movie.description }}</p>
-              <p><small>Score: {{ movie.score }}</small></p>
-              <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Details</a>
+              <a href="{{ url_for('add_to_watchlist', movie_id=movie.movie_id) }}" class="btn">Add to Watchlist</a>
+              <a href="{{ url_for('movie_details', movie_id=movie.movie_id) }}" class="btn">View Reviews</a>
             </section>
           </article>
         {% endfor %}
@@ -54,4 +60,5 @@
       <p>No results found.</p>
     {% endif %}
   {% endif %}
+  <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}

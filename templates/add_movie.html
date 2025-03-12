@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block main_content %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='suggestion.css') }}">
+  <section id="suggestion-container">
+    <h1>Add a Movie</h1>
+    <form method="POST" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <section id="title-section">
+        {{ form.title.label }} {{ form.title() }}
+        {% if form.title.errors %}
+          <ul class="errors">
+            {% for error in form.title.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+      <section id="genre-section">
+        {{ form.genre.label }} {{ form.genre() }}
+        {% if form.genre.errors %}
+          <ul class="errors">
+            {% for error in form.genre.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+      <section id="score-section">
+        {{ form.score.label }} {{ form.score() }}
+        {% if form.score.errors %}
+          <ul class="errors">
+            {% for error in form.score.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+      <section id="year-section">
+        {{ form.year.label }} {{ form.year() }}
+        {% if form.year.errors %}
+          <ul class="errors">
+            {% for error in form.year.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+      <section id="director-section">
+        {{ form.director.label }} {{ form.director() }}
+        {% if form.director.errors %}
+          <ul class="errors">
+            {% for error in form.director.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+      <section id="description-section">
+        {{ form.description.label }} {{ form.description() }}
+        {% if form.description.errors %}
+          <ul class="errors">
+            {% for error in form.description.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+      <section id="image-section">
+        {{ form.image.label }} {{ form.image() }}
+        {% if form.image.errors %}
+          <ul class="errors">
+            {% for error in form.image.errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </section>
+      <section id="submit-section">
+        <button type="submit">Submit</button>
+      </section>
+    </form>
+  </section>
+  <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+{% endblock %}

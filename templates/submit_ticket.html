@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block main_content %}
+<h2>Submit Your Ticket</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <label for="question">Your Question:</label>
+    {{ form.question(size=50) }}
+    <br>
+    {{ form.submit() }}
+</form>
+
+<hr>
+
+<h3>All Tickets</h3>
+{% for ticket in tickets %}
+    <div>
+        <p><strong>Question:</strong> {{ ticket['question'] }}</p>
+        <p><strong>Submitted by:</strong> Anonymous</p>
+        <p><strong>Response:</strong> {{ ticket['response'] if ticket['response'] else "No response yet" }}</p>
+        <hr>
+    </div>
+{% endfor %}
+<a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+
+{% endblock %}

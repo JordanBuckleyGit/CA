@@ -7,6 +7,7 @@
     <title>Movie Recommender</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
     {% block styles %} {% endblock %}
 </head>
@@ -38,21 +39,6 @@
                     </form>
                 </section>
 
-                <section id="nav-links">
-                    <ul>
-                        <li><a href="{{ url_for('random_movie') }}">Random Movie</a></li>
-                        <li><a href="{{ url_for('genre_search') }}">Search by Genre</a></li>
-                        <li><a href="{{ url_for('score_search') }}">Search by Score</a></li>
-                        <li><a href="{{ url_for('year_search') }}">Search by Year</a></li>
-                        <li>
-                            <a href="{{ url_for('cart') }}">
-                                <i class="fa-solid fa-bookmark"></i> Watchlist
-                            </a>
-                        </li>
-                        <li><a href="{{ url_for('suggest_movie') }}">Suggest a movie</a></li>
-                    </ul>
-                </section>
-
                 <!-- <section id="nav-user">
                     {% if session['user_id'] %}
                     <section id="user-info">
@@ -67,6 +53,17 @@
                 </section> -->
 
                 <section id="nav-user">
+                    <section id="nav-links">
+                        <ul>
+                            <li>
+                                <a href="{{ url_for('cart') }}">
+                                    <i class="fa-solid fa-bookmark"></i> Watchlist
+                                </a>
+                            </li>
+                            <li><a href="{{ url_for('suggest_movie') }}">
+                                <i class="fa-solid fa-lightbulb"></i>Suggest a movie</a></li>
+                        </ul>
+                    </section>
                     {% if session['user_id'] %}
                     <section id="user-info">
                         <p id="username">{{ session['user_id'] }}</p>
@@ -101,20 +98,18 @@
             <section class="footer-logo">
                 <h2>Movie DNA</h2>
                 <!-- https://unsplash.com/photos/grayscale-photo-of-camera-on-table-CTTJHNwbtPg -->
-                <img src="static/images/movieLogo.jpg" alt="Image Of Movie Logo" />
+                <img src="{{ url_for('static', filename='images/movieLogo.jpg') }} " alt="Image Of Movie Logo" />
             </section>
 
             <section class="footer-links">
                 <h3>Pages</h3>
                 <ul>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/random">Random</a></li>
-                    <li><a href="/genre">Genre</a></li>
-                    <li><a href="/score">Score</a></li>
-                    <li><a href="/year">Year</a></li>
                     <li><a href="{{ url_for('cart') }}">Watchlist</a></li>
                     <li><a href="{{ url_for('suggest_movie') }}">Suggestions</a></li>
-                    <li><a href="references.html">References</a></li>
+                    <li><a href="{{ url_for('submit_ticket') }}">Tickets</a></li>
+                    <li><a href="{{ url_for('references') }}">References</a></li>
+                    <li><a href="{{ url_for('user') }}">Profile</a></li>
                 </ul>
             </section>
 
