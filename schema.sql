@@ -26,6 +26,8 @@ INSERT INTO movies (title, genre, score, year, director, description) VALUES
     ('Gladiator', 'Action', 8.5, 2000, 'Ridley Scott', 'A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family and sent him into slavery.');
 
 
+-- I added another column called image path into movies
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (

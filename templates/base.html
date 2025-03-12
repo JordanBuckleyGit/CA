@@ -71,7 +71,6 @@
                     <section id="user-info">
                         <p id="username">{{ session['user_id'] }}</p>
                         <i class="fas fa-user-circle" id="user-icon"></i>
-                        <!-- Dropdown Menu -->
                         <section id="dropdown-menu">
                             <ul>
                                 <li><a href="{{ url_for('user') }}">Edit Profile</a></li>
@@ -94,7 +93,6 @@
     </header>
 
     <main>
-        
         {% block main_content %}{% endblock %}
     </main>
 
