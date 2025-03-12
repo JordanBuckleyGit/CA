@@ -1,7 +1,10 @@
 {% extends "base.html" %}
-
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='watchlist.css') }}">
+{% endblock %}
 {% block main_content %}
     <h1>Your Watchlist</h1>
+    <section id="watchlist-links">
     {% if watchlist %}
         <ul>
             {% for movie in watchlist %}
@@ -19,4 +22,5 @@
         <p>Your watchlist is empty.</p>
     {% endif %}
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+    </section>
 {% endblock %}
