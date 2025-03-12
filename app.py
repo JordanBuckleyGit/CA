@@ -692,7 +692,7 @@ def suggest_movie():
         if image and allowed_file(image.filename):
             filename = form.title.data.replace(" ", "_") + ".jpg"
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            image_path = os.path.join('images', filename)
+            image_path = filename
         else:
             image_path = None
         

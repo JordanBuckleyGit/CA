@@ -14,7 +14,8 @@ class MovieForm(FlaskForm):
         ("Drama", "Drama"),
         ("Fantasy", "Fantasy"),
         ("Thriller", "Thriller"),
-        ("Horror", "Horror")
+        ("Horror", "Horror"),
+        ("Comedy", "Comedy")
     ], validators=[InputRequired()])
     submit = SubmitField("Get Recommendations")
 
@@ -63,7 +64,8 @@ class MovieSuggestionForm(FlaskForm):
         ("Drama", "Drama"),
         ("Fantasy", "Fantasy"),
         ("Thriller", "Thriller"),
-        ("Horror", "Horror")
+        ("Horror", "Horror"),
+        ("Comedy", "Comedy")
     ], validators=[InputRequired()])
     score = FloatField("Score", validators=[InputRequired(), NumberRange(min=0, max=10)])
     year = IntegerField("Year", validators=[InputRequired(), NumberRange(min=1900, max=2100)])
