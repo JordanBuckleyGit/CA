@@ -21,7 +21,6 @@ class MovieForm(FlaskForm):
 
 class ScoreForm(FlaskForm):
     min_score = FloatField("Min Score", validators=[InputRequired(), NumberRange(min=0, max=10)])
-    max_score = FloatField("Max Score", validators=[InputRequired(), NumberRange(min=0, max=10)])
     submit = SubmitField("Search by Score")
 
 class YearForm(FlaskForm):

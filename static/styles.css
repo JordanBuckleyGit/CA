@@ -481,3 +481,168 @@ nav {
 #nav-search button i {
     color: #333;
 }
+
+
+@media (max-width: 480px) {
+    #nav-logo a {
+        font-size: 1.2rem;
+    }
+
+    #nav-links ul li a {
+        font-size: 1rem;
+    }
+
+    #welcome-container h1 {
+        font-size: 2rem;
+    }
+
+    #welcome-container p {
+        font-size: 1rem;
+    }
+
+    #dna-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .dna-box {
+        padding: 1.5rem;
+    }
+
+    .dna-box h2 {
+        font-size: 1.2rem;
+    }
+
+    .dna-box p {
+        font-size: 0.9rem;
+    }
+
+    .footer {
+        padding: 20px;
+    }
+
+    .footer-logo h2 {
+        font-size: 1.2rem;
+    }
+
+    .footer-links h3,
+    .footer-contact h3 {
+        font-size: 1rem;
+    }
+
+    .footer-links ul li a,
+    .footer-contact a {
+        font-size: 0.9rem;
+    }
+}
+
+/* Laptops (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    #nav-logo a {
+        font-size: 1.4rem;
+    }
+
+    #nav-links ul li a {
+        font-size: 1.1rem;
+    }
+
+    #welcome-container h1 {
+        font-size: 2.2rem;
+    }
+
+    #welcome-container p {
+        font-size: 1.1rem;
+    }
+
+    #dna-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+
+    .dna-box {
+        padding: 2rem;
+    }
+
+    .dna-box h2 {
+        font-size: 1.3rem;
+    }
+
+    .dna-box p {
+        font-size: 1rem;
+    }
+
+    .footer {
+        padding: 30px;
+    }
+
+    .footer-logo h2 {
+        font-size: 1.4rem;
+    }
+
+    .footer-links h3,
+    .footer-contact h3 {
+        font-size: 1.1rem;
+    }
+
+    .footer-links ul li a,
+    .footer-contact a {
+        font-size: 1rem;
+    }
+}
+
+/* PCs (1025px and above) */
+@media (min-width: 1025px) {
+    #nav-logo a {
+        font-size: 1.5rem;
+    }
+
+    #nav-links ul li a {
+        font-size: 1.2rem;
+    }
+
+    #welcome-container h1 {
+        font-size: 2.5rem;
+    }
+
+    #welcome-container p {
+        font-size: 1.25rem;
+    }
+
+    #dna-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .dna-box {
+        padding: 2.5rem;
+    }
+
+    .dna-box h2 {
+        font-size: 1.5rem;
+    }
+
+    .dna-box p {
+        font-size: 1.1rem;
+    }
+
+    .footer {
+        padding: 40px;
+    }
+
+    .footer-logo h2 {
+        font-size: 1.5rem;
+    }
+
+    .footer-links h3,
+    .footer-contact h3 {
+        font-size: 1.2rem;
+    }
+
+    .footer-links ul li a,
+    .footer-contact a {
+        font-size: 1.1rem;
+    }
+}

@@ -41,7 +41,7 @@ body {
 /* Carousel Container */
 .carousel-container {
     position: relative;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
     overflow: hidden;
     display: flex;
@@ -61,7 +61,6 @@ body {
     justify-content: flex-start; /* Default alignment */
 }
 
-/* Center content if there's only 1 or no reviews */
 .reviews-container:has(.review-card:only-of-type),
 .reviews-container:empty {
     justify-content: center; /* Center horizontally */

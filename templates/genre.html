@@ -9,14 +9,5 @@
         {{ form.submit() }}
     </form>
 
-    {% if movies %}
-        <h3>Results:</h3>
-        <ul>
-            {% for movie in movies %}
-                <li>{{ movie.title }} ({{ movie.year }}) - {{ movie.score }}/10</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}

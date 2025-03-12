@@ -1,19 +1,19 @@
-<!-- FIX -->
-
 {% extends "base.html" %}
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='myDna.css') }}">
 {% endblock %}
 {% block main_content %}
-  <h1>My DNA</h1>
-  <p>Based on your watchlist and highly reviewed movies, here are your personalized recommendations:</p>
+  <section id="dna-header">
+    <h1>My DNA</h1>
+    <p>Based on your watchlist and highly reviewed movies, here are your personalized recommendations:</p>
+  </section>
 
   {% if movies %}
-    <div class="dna-helix">
+    <section id="dna-helix">
       {% for movie in movies %}
-      <div class="movie-card">
+        <section id="movie-{{ movie.movie_id }}" class="movie-card">
           {% if movie.image_path %}
-              <img src="{{ url_for('static', filename='images/' ~ movie.image_path) }}" alt="{{ movie.title }}" />
+            <img src="{{ url_for('static', filename='images/' ~ movie.image_path) }}" alt="{{ movie.title }}" />
           {% endif %}
           <h2>{{ movie.title }}</h2>
           <p><strong>Genre:</strong> {{ movie.genre }}</p>
@@ -21,11 +21,14 @@
           <p><strong>Year:</strong> {{ movie.year }}</p>
           <p><strong>Director:</strong> {{ movie.director }}</p>
           <p>{{ movie.description }}</p>
-      </div>
-    {% endfor %}
-    </div>
+        </section>
+      {% endfor %}
+    </section>
   {% else %}
-    <p>No recommendations found. Add more movies to your watchlist or explore highly reviewed movies!</p>
+    <section id="no-recommendations">
+      <p>No recommendations found. Add more movies to your watchlist or explore highly reviewed movies!</p>
+    </section>
   {% endif %}
+
   <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}

@@ -58,8 +58,8 @@ def search():
         return render_template('search.html', results=results)
     elif filter_type == 'score':
         try:
-            score_value = float(query)
-            cur.execute("SELECT * FROM movies WHERE score >= ?", (score_value,))
+            min_score = float(query)
+            cur.execute("SELECT * FROM movies WHERE score >= ?", (min_score,))
             results = cur.fetchall()
             return render_template('search.html', results=results)
         except ValueError:
@@ -156,38 +156,31 @@ def random_movie():
 @login_required
 def genre_search():
     form = MovieForm()
-    movies = None
     if form.validate_on_submit():
         genre = form.genre.data
-        db = get_db()
-        movies = db.execute("SELECT * FROM movies WHERE genre = ?", (genre,)).fetchall()
-    return render_template("genre.html", form=form,
-                            movies=movies)
+        return redirect(url_for("search", query=genre, filter="genre"))
+    
+    return render_template("genre.html", form=form)
 
 @app.route("/score", methods=["GET", "POST"])
 @login_required
 def score_search():
     form = ScoreForm()
-    movies = None
     if form.validate_on_submit():
         min_score = form.min_score.data
-        max_score = form.max_score.data
-        db = get_db()
-        movies = db.execute("SELECT * FROM movies WHERE score BETWEEN ? AND ?", (min_score, max_score)).fetchall()
-    return render_template("score.html", form=form,
-                            movies=movies)
+        return redirect(url_for("search", query=f"{min_score}", filter="score"))
+    
+    return render_template("score.html", form=form)
 
 @app.route("/year", methods=["GET", "POST"])
 @login_required
 def year_search():
     form = YearForm()
-    movies = None
     if form.validate_on_submit():
         year = form.year.data
-        db = get_db()
-        movies = db.execute("SELECT * FROM movies WHERE year = ?", (year,)).fetchall()
-    return render_template("year.html", form=form,
-                            movies=movies)
+        return redirect(url_for("search", query=year, filter="year"))
+    
+    return render_template("year.html", form=form)
 
 # DNA SECTION
 @app.route("/my-dna")

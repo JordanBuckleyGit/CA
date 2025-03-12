@@ -4,21 +4,10 @@
     <h2>Search by Score</h2>
     <form method="POST">
         {{ form.hidden_tag() }}
-        <label>Min Score:</label>
-        {{ form.min_score() }}
-        <label>Max Score:</label>
-        {{ form.max_score() }}
+        <label for="min_score">Minimum Score:</label>
+        {{ form.min_score(id="min_score") }}
         {{ form.submit() }}
     </form>
-
-    {% if movies %}
-        <h3>Results:</h3>
-        <ul>
-            {% for movie in movies %}
-                <li>{{ movie.title }} ({{ movie.year }}) - {{ movie.score }}/10</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
 
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}

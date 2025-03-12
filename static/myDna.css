@@ -1,0 +1,144 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(-45deg, #0f0f0f, #1c1c1c, #2c2c2c, #000000);
+    background-size: 400% 400%;
+    animation: movingBackground 10s ease infinite;
+    color: white;
+    text-align: center;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+#dna-header {
+    padding: 2rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+#dna-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #A9DFBF;
+}
+
+#dna-header p {
+    font-size: 1.2rem;
+    color: #ccc;
+}
+
+#dna-helix {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.movie-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #A9DFBF;
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.movie-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 255, 166, 0.3);
+}
+
+.movie-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.movie-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #A9DFBF;
+}
+
+.movie-card p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #ccc;
+}
+
+.movie-card p strong {
+    color: #A9DFBF;
+}
+
+/* No Recommendations Section */
+#no-recommendations {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+#no-recommendations p {
+    font-size: 1.2rem;
+    color: #ccc;
+}
+
+/* Back Button */
+.back-button {
+    display: inline-block;
+    margin: 2rem auto;
+    padding: 10px 20px;
+    background: #A9DFBF;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.back-button:hover {
+    background: #8ECBB0;
+}
+
+@media (max-width: 768px) {
+    #dna-helix {
+        grid-template-columns: 1fr;
+        padding: 0.5rem;
+    }
+
+    .movie-card {
+        padding: 0.5rem;
+    }
+
+    #dna-header h1 {
+        font-size: 1.75rem;
+    }
+
+    #dna-header p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #dna-header h1 {
+        font-size: 1.5rem;
+    }
+
+    #dna-header p {
+        font-size: 0.8rem;
+    }
+
+    .movie-card h2 {
+        font-size: 1rem;
+    }
+
+    .movie-card p {
+        font-size: 0.8rem;
+    }
+}

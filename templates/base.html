@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Recommender</title>
+    <title>Movie DNA</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
@@ -21,13 +21,13 @@
                         <i class="fa-solid fa-house"></i>
                     </a>
                     <section id="nav-logo">
-                        <a href="{{ url_for('index') }}">Movie Recommender</a>
+                        <a href="{{ url_for('index') }}">Movie DNA</a>
                     </section>
                 </section>
 
                 <section id="nav-search">
                     <form action="{{ url_for('search') }}" method="GET">
-                        <input type="text" name="query" placeholder="Search movies..."> <!-- Removed 'required' -->
+                        <input type="text" name="query" placeholder="Search movies...">
                         <select name="filter">
                             <option value="all">All</option>
                             <option value="genre">Genre</option>
