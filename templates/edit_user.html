@@ -2,14 +2,14 @@
 {% block main_content %}
 <h1>Edit User: {{ user.user_id }}</h1>
 <form method="POST">
-    <div>
+    <section id="username-change">
         <label for="new_username">New Username:</label><br>
         <input type="text" id="new_username" name="new_username" value="{{ user.user_id }}" required><br>
-    </div>
+    </section>
     
-    <div>
+    <section>
         <button type="submit">Update Username</button>
-    </div>
+    </section>
 </form>
 <a href="{{ url_for('manage_users') }}" class="back-button">Back to Manage Users</a>
 {% endblock %}

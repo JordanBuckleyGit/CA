@@ -9,7 +9,6 @@
   </header>
 
   {% if movies_by_genre %}
-    <!-- Display movies grouped by genre -->
     {% for genre, movies in movies_by_genre.items() %}
       <section id="genre-{{ genre | lower | replace(' ', '-') }}">
         <h2>{{ genre }}</h2>
@@ -34,7 +33,7 @@
       </section>
     {% endfor %}
   {% else %}
-    <!-- Display regular search results -->
+    <!-- displays regular search results -->
     {% if results %}
       <section id="movie-grid" class="movie-grid">
         {% for movie in results %}

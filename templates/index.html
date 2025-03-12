@@ -1,3 +1,5 @@
+<!-- FIX -->
+
 {% extends "base.html" %}
 
 {% block main_content %}
@@ -9,7 +11,7 @@
 
 {% if request.path == '/' %}
 <section id="hero">
-    <div id="dna-container">
+    <section id="dna-container">
         <div class="dna-box">
             <a href="{{ url_for('random_movie') }}">Random Movie</a>
         </div>
@@ -25,7 +27,7 @@
         <div class="dna-box">
             <a href="{{ url_for('my_dna') }}">My DNA</a>
         </div>
-    </div>
+    </section>
 </section>
 
 {% endif %}
