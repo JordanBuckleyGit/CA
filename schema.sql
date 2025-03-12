@@ -81,3 +81,9 @@ CREATE TABLE movie_suggestions (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+DROP TABLE IF EXISTS newsletter_subscribers;
+
+CREATE TABLE newsletter_subscribers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE
+);

@@ -775,6 +775,11 @@ def reject_suggestion(suggestion_id):
     
     return redirect(url_for("view_movie_suggestions"))
 
+# more ideas here please
+
+# weekly movie suggestion 
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return "<h1>404</h1><p>The resource could not be found. Please check if there was an error with how the link was typed up.</p>"
