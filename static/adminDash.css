@@ -1,0 +1,100 @@
+
+h1 {
+    font-size: 2rem;
+    color: #A9DFBF; /* Accent color */
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(169, 223, 191, 0.5);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+table th, table td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #A9DFBF; /* Accent border */
+}
+
+table th {
+    background-color: rgba(169, 223, 191, 0.1); /* Light accent background */
+    font-weight: bold;
+    color: #A9DFBF; /* Accent color */
+}
+
+table tr:hover {
+    background-color: rgba(169, 223, 191, 0.1); /* Light accent background on hover */
+}
+
+a {
+    color: #A9DFBF; /* Accent color for links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #8ECBB0; /* Slightly darker accent color on hover */
+    text-decoration: underline;
+}
+
+.btn, .back-button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #A9DFBF; /* Accent color */
+    color: #333; /* Dark text for contrast */
+    border-radius: 0.25rem;
+    text-align: center;
+    margin: 0.5rem 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover, .back-button:hover {
+    background-color: #8ECBB0; /* Slightly darker accent color on hover */
+    transform: scale(1.05);
+}
+
+/* Additional Styles for Manage Reviews and Movie Suggestions */
+.btn-delete {
+    background-color: #dc3545; /* Red for delete buttons */
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-delete:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+.btn-accept {
+    background-color: #28a745; /* Green for accept buttons */
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-accept:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+.btn-reject {
+    background-color: #dc3545; /* Red for reject buttons */
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-reject:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 0.25rem;
+}

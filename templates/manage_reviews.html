@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminDash.css') }}">
+{% endblock %}
 {% block main_content %}
 <h1>Manage Reviews</h1>
 <table>

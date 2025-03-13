@@ -3,8 +3,6 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid #A9DFBF;
     border-radius: 1.25rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }

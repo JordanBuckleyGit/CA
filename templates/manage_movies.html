@@ -1,33 +1,36 @@
 {% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='adminDash.css') }}">
+{% endblock %}
 {% block main_content %}
-<h1>Manage Movies</h1>
-<a href="{{ url_for('add_movie') }}" class="btn">Add New Movie</a>
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Score</th>
-            <th>Year</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for movie in movies %}
-        <tr>
-            <td>{{ movie.title }}</td>
-            <td>{{ movie.genre }}</td>
-            <td>{{ movie.score }}</td>
-            <td>{{ movie.year }}</td>
-            <td>
-                <a href="{{ url_for('edit_movie', movie_id=movie.movie_id) }}">Edit</a>
-                <a href="{{ url_for('delete_movie', movie_id=movie.movie_id) }}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-        
-    </tbody>
-</table>
-<a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Dashboard</a>
-
+<main>
+    <h1>Manage Movies</h1>
+    <a href="{{ url_for('add_movie') }}" class="btn">Add New Movie</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Score</th>
+                <th>Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movie in movies %}
+            <tr>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.genre }}</td>
+                <td>{{ movie.score }}</td>
+                <td>{{ movie.year }}</td>
+                <td>
+                    <a href="{{ url_for('edit_movie', movie_id=movie.movie_id) }}">Edit</a>
+                    <a href="{{ url_for('delete_movie', movie_id=movie.movie_id) }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Dashboard</a>
+</main>
 {% endblock %}

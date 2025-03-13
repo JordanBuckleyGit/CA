@@ -816,11 +816,11 @@ def suggest_movie():
         # insert the movie suggestion into the suggestion database only
         db.execute(
             """
-            INSERT INTO movie_suggestions (user_id, title, genre, year, director, description, image_path)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO movie_suggestions (user_id, title, genre,score, year, director, description, image_path)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                session["user_id"], form.title.data, form.genre.data, form.year.data, 
+                session["user_id"], form.title.data, form.genre.data, form.score.data, form.year.data, 
                 form.director.data, form.description.data, image_path
             )
         )
@@ -953,21 +953,5 @@ def admin_tickets():
 def references():
     return render_template("references.html")
 
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     return "<h1>404</h1><p>The resource could not be found. Please check if there was an error with how the link was typed up.</p>"
-
-# @app.errorhandler(405)
-# def handle_exception(e):
-#     return "<h1>405 Method not Allowed</h1><p>The server has received the request but rejected the specific HTTP method used please try again</p>"
-
-# @app.errorhandler(500)
-# def handle_exception(e):
-#     return "<h1>500 Internal Server Error</h1><p>The server encountered an unexpected condition that prevented it from fulfilling the request</p>"
-
-# @app.errorhandler(403)
-# def handle_exception(e):
-#     return "<h1>403 Forbidden</h1><p>The request you have made is forbidden</p>"
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
