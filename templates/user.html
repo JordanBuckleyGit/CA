@@ -1,5 +1,3 @@
-<!-- FIX -->
-
 {% extends "base.html" %}
 
 {% block styles %}
@@ -12,26 +10,24 @@
         <form action="{{ url_for('user') }}" method="POST">
             {{ form.hidden_tag() }}
             
-            <div class="form-group">
-                {{ form.username.label }}<br>
-                {{ form.username(size=32, value=session['user_id'], id="username-input") }}<br>
+            <section class="form-group">
+                <label for="username-input">{{ form.username.label }}</label>
+                {{ form.username(size=32, value=session['user_id'], id="username-input") }}
                 {% for error in form.username.errors %}
-                    <span class="error-message">{{ error }}</span><br>
+                    <p class="error-message">{{ error }}</p>
                 {% endfor %}
-            </div>
+            </section>
 
-            <div class="form-group">
+            <section class="form-group">
                 {{ form.submit(id="submit-button") }}
-            </div>
+            </section>
         </form>
     </section>
 
     <section id="network">
         <h3>Network</h3>
     
-        <!-- Two-column layout for Followers and Following -->
-        <div id="network-columns">
-            <!-- Followers -->
+        <section id="network-columns">
             <section id="follower-page">
                 <h4>Followers</h4>
                 <ul>
@@ -40,11 +36,12 @@
                             {{ follower.follower }}
                             {% if follower.follower != session["user_id"] %}
                                 {% if follower.follower in following_set %}
-                                    <span>(Following)</span>
-                                    <a href="{{ url_for('unfollow_user', username=follower.follower) }}" class="btn">Unfollow</a>
+                                    <p>(Following)</p>
+                                    <a href="{{ url_for('unfollow_user', username=follower.follower) }}" class="btn"><i class="fa-solid fa-user-minus"></i></a>
                                 {% else %}
-                                    <a href="{{ url_for('follow_user', username=follower.follower) }}" class="btn">Follow</a>
+                                    <a href="{{ url_for('follow_user', username=follower.follower) }}" class="btn"><i class="fa-solid fa-user-plus"></i></a>
                                 {% endif %}
+                                <a href="{{ url_for('user_profile', username=follower.follower) }}" class="btn view-profile-btn"><i class="fa-solid fa-eye"></i></a>
                             {% endif %}
                         </li>
                     {% else %}
@@ -53,7 +50,6 @@
                 </ul>
             </section>
     
-            <!-- Following -->
             <section id="network-page">
                 <h4>Following</h4>
                 <ul>
@@ -61,7 +57,8 @@
                         <li>
                             {{ follow.following }}
                             {% if follow.following != session["user_id"] %}
-                                <a href="{{ url_for('unfollow_user', username=follow.following) }}" class="btn">Unfollow</a>
+                                <a href="{{ url_for('unfollow_user', username=follow.following) }}" class="btn"><i class="fa-solid fa-user-minus"></i></a>
+                                <a href="{{ url_for('user_profile', username=follow.following) }}" class="btn view-profile-btn"><i class="fa-solid fa-eye"></i></a>
                             {% endif %}
                         </li>
                     {% else %}
@@ -69,24 +66,19 @@
                     {% endfor %}
                 </ul>
             </section>
-        </div>
+        </section>
     
-        <!-- Suggested Accounts (centered below the columns) -->
         <section id="suggestion">
             <h4>Suggested Accounts</h4>
             <ul>
                 {% for user in all_users %}
-                    <li>
-                        {{ user.user_id }}
-                        {% if user.user_id != session["user_id"] %}
-                            {% if user.user_id in following_set %}
-                                <span>(Following)</span>
-                                <a href="{{ url_for('unfollow_user', username=user.user_id) }}" class="btn">Unfollow</a>
-                            {% else %}
-                                <a href="{{ url_for('follow_user', username=user.user_id) }}" class="btn">Follow</a>
-                            {% endif %}
-                        {% endif %}
-                    </li>
+                    {% if user.user_id not in following_set %}
+                        <li>
+                            {{ user.user_id }}
+                            <a href="{{ url_for('follow_user', username=user.user_id) }}" class="btn"><i class="fa-solid fa-user-plus"></i></a>
+                            <a href="{{ url_for('user_profile', username=user.user_id) }}" class="btn view-profile-btn"><i class="fa-solid fa-eye"></i></a>
+                        </li>
+                    {% endif %}
                 {% else %}
                     <li>No other users found.</li>
                 {% endfor %}
@@ -94,9 +86,10 @@
         </section>
     </section>
 
+
     <section id="user-reviews">
         <h3>Your Reviews</h3>
-        <div class="carousel-container">
+        <section class="carousel-container">
             <button class="carousel-button prev" onclick="scrollReviews(-320)">&#10094;</button>
             {% if reviews %}
                 <ul id="reviews-list">
@@ -112,7 +105,7 @@
                 <p id="no-reviews-message">You haven't written any reviews yet.</p>
             {% endif %}
             <button class="carousel-button next" onclick="scrollReviews(320)">&#10095;</button>
-        </div>
+        </section>
     </section>
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
 {% endblock %}

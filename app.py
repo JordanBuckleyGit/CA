@@ -651,7 +651,7 @@ def follow_user(username):
     db.execute("INSERT INTO network (follower, following) VALUES (?, ?)", (current_user, username))
     db.commit()
 
-    return redirect(url_for("user_profile", username=username))
+    return redirect(url_for("user", username=username))
 
 @app.route("/unfollow/<username>")
 @login_required
@@ -670,17 +670,19 @@ def unfollow_user(username):
     db.execute("DELETE FROM network WHERE follower = ? AND following = ?", (current_user, username))
     db.commit()
 
-    return redirect(url_for("user_profile", username=username))
+    return redirect(url_for("user", username=username))
 
 @app.route("/user/<username>")
 @login_required
 def user_profile(username):
     db = get_db()
 
+    # Fetch the current user's profile
     user = db.execute("SELECT * FROM users WHERE user_id = ?", (username,)).fetchone()
     if not user:
         return "User not found.", 404
 
+    # Fetch reviews by the user
     reviews = db.execute("""
         SELECT reviews.*, movies.title 
         FROM reviews 
@@ -688,6 +690,7 @@ def user_profile(username):
         WHERE reviews.user = ?
     """, (username,)).fetchall()
 
+    # Fetch followers and following
     followers = db.execute(
         "SELECT follower FROM network WHERE following = ?",
         (username,)
@@ -698,10 +701,29 @@ def user_profile(username):
         (username,)
     ).fetchall()
 
+    # Debugging: Print the following list
+    print("Following:", following)
+
+    # Create a set of users the current user is already following
+    following_set = {row["following"] for row in following}
+
+    # Debugging: Print the following_set
+    print("Following Set:", following_set)
+
+    # Check if the current user is following the profile user
     is_following = db.execute(
         "SELECT * FROM network WHERE follower = ? AND following = ?",
         (session["user_id"], username)
     ).fetchone() is not None
+
+    # Fetch all users except the current user
+    all_users = db.execute("SELECT * FROM users WHERE user_id != ?", (session["user_id"],)).fetchall()
+
+    # Filter out users that the current user is already following
+    suggested_users = [user for user in all_users if user["user_id"] not in following_set]
+
+    # Debugging: Print the suggested_users list
+    print("Suggested Users:", suggested_users)
 
     return render_template(
         "user_profile.html",
@@ -709,8 +731,10 @@ def user_profile(username):
         reviews=reviews,
         followers=followers,
         following=following,
-        is_following=is_following
-    )
+        is_following=is_following,
+        all_users=suggested_users,
+        following_set=following_set
+)
 
 # user suggestions
 
@@ -806,8 +830,6 @@ def reject_suggestion(suggestion_id):
     db.commit()
     
     return redirect(url_for("view_movie_suggestions"))
-
-# more ideas here please
 
 # ticket form
 

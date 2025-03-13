@@ -84,8 +84,7 @@ function scrollReviews(distance) {
 }
 
 function scrollReviews(distance) {
-    const reviewsList = document.querySelector('.reviews-container');
-    console.log(reviewsList); // Check if the element is found
+    const reviewsList = document.querySelector('#user-reviews');
     if (reviewsList) {
         reviewsList.scrollBy({
             left: distance,
