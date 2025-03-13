@@ -6,7 +6,6 @@ h1 {
     text-shadow: 0 0 10px rgba(169, 223, 191, 0.5);
 }
 
-/* Watchlist Links Section */
 #watchlist-links {
     max-width: 800px;
     margin: 0 auto;
@@ -17,7 +16,6 @@ h1 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Watchlist List */
 #watchlist-links ul {
     list-style: none;
     padding: 0;
@@ -49,7 +47,6 @@ h1 {
     color: #ccc;
 }
 
-/* Buttons */
 .btn, .back-button {
     display: inline-block;
     margin: 1rem 0.5rem;
@@ -68,14 +65,12 @@ h1 {
     transform: scale(1.05);
 }
 
-/* Empty Watchlist Message */
 #watchlist-links p {
     font-size: 1.2rem;
     color: #ccc;
     margin: 2rem 0;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     h1 {
         font-size: 2rem;

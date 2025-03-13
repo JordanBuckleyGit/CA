@@ -1,21 +1,25 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='tickets.css') }}">
+{% endblock %}
 {% block main_content %}
-<h2>Tickets Awaiting Response</h2>
-{% for ticket in tickets %}
-    <section>
-        <p><strong>Question:</strong> {{ ticket['question'] }}</p>
-        <p><strong>Submitted by:</strong> Anonymous</p>
-        
-        <form method="POST">
-            <input type="hidden" name="ticket_id" value="{{ ticket['id'] }}">
+<section id="ticket-section">
+    <h2>Tickets Awaiting Response</h2>
+    {% for ticket in tickets %}
+        <section id="ticket-card">
+            <p><strong>Question:</strong> {{ ticket['question'] }}</p>
+            <p><strong>Submitted by:</strong> Anonymous</p>
             
-            <label for="response">Admin Response:</label>
-            <textarea name="response" required></textarea>
-            <br>
-            <button type="submit">Submit Response</button>
-        </form>
-    </section>
-{% endfor %}
-<a href="{{ url_for('admin_dashboard') }}" class="back-button">Back to Dashboard</a>
-
+            <form method="POST" id="ticket-form">
+                <input type="hidden" name="ticket_id" value="{{ ticket['id'] }}">
+                
+                <label for="response">Admin Response:</label>
+                <textarea name="response" id="ticket-textarea" required></textarea>
+                <br>
+                <button type="submit" id="ticket-button">Submit Response</button>
+            </form>
+        </section>
+    {% endfor %}
+    <a href="{{ url_for('admin_dashboard') }}" id="back-button">Back to Dashboard</a>
+</section>
 {% endblock %}

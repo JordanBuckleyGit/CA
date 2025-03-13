@@ -1,25 +1,26 @@
 {% extends "base.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='tickets.css') }}">
+{% endblock %}
 {% block main_content %}
-<h2>Submit Your Ticket</h2>
-<form method="POST">
-    {{ form.hidden_tag() }}
-    <label for="question">Your Question:</label>
-    {{ form.question(size=50) }}
-    <br>
-    {{ form.submit() }}
-</form>
+<section id="ticket-section">
+    <h2>Submit Your Ticket</h2>
+    <form method="POST" id="ticket-form">
+        {{ form.hidden_tag() }}
+        <label for="question">Your Question:</label>
+        {{ form.question(size=50, id="ticket-input") }}
+        <br>
+        {{ form.submit(id="ticket-button") }}
+    </form>
 
-<hr>
-
-<h3>All Tickets</h3>
-{% for ticket in tickets %}
-    <div>
-        <p><strong>Question:</strong> {{ ticket['question'] }}</p>
-        <p><strong>Submitted by:</strong> Anonymous</p>
-        <p><strong>Response:</strong> {{ ticket['response'] if ticket['response'] else "No response yet" }}</p>
-        <hr>
-    </div>
-{% endfor %}
-<a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
-
+    <h3>All Tickets</h3>
+    {% for ticket in tickets %}
+        <section id="ticket-card">
+            <p><strong>Question:</strong> {{ ticket['question'] }}</p>
+            <p><strong>Submitted by:</strong> Anonymous</p>
+            <p><strong>Admin Response:</strong> {{ ticket['response'] if ticket['response'] else "No response yet" }}</p>
+        </section>
+    {% endfor %}
+    <a href="{{ url_for('index') }}" id="back-button">Back to Home</a>
+</section>
 {% endblock %}

@@ -14,14 +14,12 @@
     box-shadow: 0 10px 20px rgba(0, 255, 166, 0.3);
 }
 
-/* Heading */
 #suggestion-container h1 {
     font-size: 2rem;
     margin-bottom: 1.5rem;
     color: #A9DFBF;
 }
 
-/* Form Sections */
 #suggestion-container section {
     margin-bottom: 1.5rem;
 }
@@ -58,7 +56,6 @@
     padding: 0.5rem;
 }
 
-/* Submit Button */
 #suggestion-container button {
     background: #A9DFBF;
     color: #333;
@@ -76,7 +73,6 @@
     transform: scale(1.05);
 }
 
-/* Error Messages */
 #suggestion-container .errors {
     color: #FF4500;
     font-size: 0.875rem;

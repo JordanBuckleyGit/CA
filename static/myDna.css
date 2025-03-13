@@ -1,4 +1,3 @@
-/* General Styles */
 body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(-45deg, #0f0f0f, #1c1c1c, #2c2c2c, #000000);
@@ -76,7 +75,6 @@ body {
     color: #A9DFBF;
 }
 
-/* No Recommendations Section */
 #no-recommendations {
     padding: 2rem;
     background: rgba(255, 255, 255, 0.05);
@@ -90,7 +88,6 @@ body {
     color: #ccc;
 }
 
-/* Back Button */
 .back-button {
     display: inline-block;
     margin: 2rem auto;
