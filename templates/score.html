@@ -1,6 +1,13 @@
+<!-- RAN OUT OF TIME TO STYLE -->
+
 {% extends "base.html" %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='search.css') }}">
+{% endblock %}
+
 {% block main_content %}
+<main>
     <h2>Search by Score</h2>
     <form method="POST">
         {{ form.hidden_tag() }}
@@ -10,4 +17,5 @@
     </form>
 
     <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+</main>
 {% endblock %}

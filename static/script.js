@@ -52,9 +52,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const userIcon = document.getElementById("user-icon");
     const dropdownMenu = document.getElementById("dropdown-menu");
 
+
     if (userIcon && dropdownMenu) {
         userIcon.addEventListener("click", function (event) {
-            event.stopPropagation();
+            event.stopPropagation(); 
             dropdownMenu.classList.toggle("active");
         });
 
@@ -68,17 +69,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// dont have time to fix this sorry
 
 function scrollReviews(distance) {
-    const carouselContainer = event.target.closest('.carousel-container');
-    if (!carouselContainer) return;
+    const reviewsContainer = document.querySelector('#reviews-container');
+    const userReviewsContainer = document.querySelector('#reviews-list');
 
-    const reviewsList = carouselContainer.querySelector('.reviews-container ul, #reviews-list');
-    if (!reviewsList) return;
-
-    reviewsList.scrollBy({
-        left: distance,
-        behavior: 'smooth',
-    });
+    if (reviewsContainer) {
+        reviewsContainer.scrollBy({
+            left: distance,
+            behavior: 'smooth',
+        });
+    }
+    if (userReviewsContainer) {
+        userReviewsContainer.scrollBy({
+            left: distance,
+            behavior: 'smooth',
+        });
+    }
 }

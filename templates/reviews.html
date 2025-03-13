@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='reviews.css') }}">
+<script src="{{ url_for('static', filename='script.js') }}" defer></script>
 
 {% block main_content %}
     <main class="reviews-section">
@@ -7,7 +8,7 @@
             {% if reviews|length >= 3 %}
                 <button class="carousel-button prev" onclick="scrollReviews(-320)">&#10094;</button>
             {% endif %}
-            <section class="reviews-container">
+            <section id="reviews-container" class="reviews-container">
                 {% for review in reviews %}
                     <article class="review-card">
                         <p class="review-user"><strong>{{ review.user }}</strong></p>

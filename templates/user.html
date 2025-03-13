@@ -92,8 +92,8 @@
         <section class="carousel-container">
             <button class="carousel-button prev" onclick="scrollReviews(-320)">&#10094;</button>
             {% if reviews %}
-                <ul id="reviews-list">
-                    {% for review in reviews %}
+            <ul id="reviews-list" class="scrollable-reviews">
+                {% for review in reviews %}
                         <li class="review-item">
                             <strong class="review-movie">Movie:</strong> {{ review.title }}<br>
                             <strong class="review-text">Review:</strong> {{ review.review_text }}<br>
