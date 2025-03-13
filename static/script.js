@@ -52,16 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const userIcon = document.getElementById("user-icon");
     const dropdownMenu = document.getElementById("dropdown-menu");
 
-    console.log("User Icon:", userIcon); // Debug log
-    console.log("Dropdown Menu:", dropdownMenu); // Debug log
-
     if (userIcon && dropdownMenu) {
         userIcon.addEventListener("click", function (event) {
-            event.stopPropagation(); // Prevent the click from bubbling up
+            event.stopPropagation();
             dropdownMenu.classList.toggle("active");
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener("click", function (event) {
             if (!dropdownMenu.contains(event.target) && event.target !== userIcon) {
                 dropdownMenu.classList.remove("active");
@@ -72,23 +68,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// dont have time to fix this sorry
 
 function scrollReviews(distance) {
-    const reviewsList = document.querySelector('#reviews-list');
-    if (reviewsList) {
-        reviewsList.scrollBy({
-            left: distance,
-            behavior: 'smooth',
-        });
-    }
-}
+    const carouselContainer = event.target.closest('.carousel-container');
+    if (!carouselContainer) return;
 
-function scrollReviews(distance) {
-    const reviewsList = document.querySelector('#user-reviews');
-    if (reviewsList) {
-        reviewsList.scrollBy({
-            left: distance,
-            behavior: 'smooth',
-        });
-    }
+    const reviewsList = carouselContainer.querySelector('.reviews-container ul, #reviews-list');
+    if (!reviewsList) return;
+
+    reviewsList.scrollBy({
+        left: distance,
+        behavior: 'smooth',
+    });
 }

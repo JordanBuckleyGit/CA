@@ -1,5 +1,3 @@
-<!-- FIX -->
-
 {% extends "base.html" %}
 
 {% block main_content %}
@@ -12,24 +10,23 @@
 {% if request.path == '/' %}
 <section id="hero">
     <section id="dna-container">
-        <div class="dna-box">
+        <section class="dna-box">
             <a href="{{ url_for('random_movie') }}">Random Movie</a>
-        </div>
-        <div class="dna-box">
+        </section>
+        <section class="dna-box">
             <a href="{{ url_for('genre_search') }}">Search by Genre</a>
-        </div>
-        <div class="dna-box">
+        </section>
+        <section class="dna-box">
             <a href="{{ url_for('score_search') }}">Search by Score</a>
-        </div>
-        <div class="dna-box">
+        </section>
+        <section class="dna-box">
             <a href="{{ url_for('year_search') }}">Search by Year</a>
-        </div>
-        <div class="dna-box">
+        </section>
+        <section class="dna-box">
             <a href="{{ url_for('my_dna') }}">My DNA</a>
-        </div>
+        </section>
     </section>
 </section>
 
 {% endif %}
-
 {% endblock %}

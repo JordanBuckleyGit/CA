@@ -211,13 +211,13 @@ nav {
 }
 
 .footer {
-    background: rgba(255, 255, 255, 0.1); /* Semi-transparent dark box */
+    background: rgba(255, 255, 255, 0.1); 
     border: 2px solid #A9DFBF;
-    border-radius: 20px; /* Rounded corners */
+    border-radius: 20px; 
     padding: 40px;
-    width: 90%; /* Doesn't take full width */
-    max-width: 95%; /* Centered box size */
-    margin: 40px auto; /* Centered on the page */
+    width: 90%;
+    max-width: 95%;
+    margin: 40px auto;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -537,7 +537,6 @@ nav {
     }
 }
 
-/* Laptops (769px to 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
     #nav-logo a {
         font-size: 1.4rem;
@@ -592,7 +591,6 @@ nav {
     }
 }
 
-/* PCs (1025px and above) */
 @media (min-width: 1025px) {
     #nav-logo a {
         font-size: 1.5rem;

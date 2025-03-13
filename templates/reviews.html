@@ -1,30 +1,28 @@
-<!-- FIX -->
-
 <link rel="stylesheet" href="{{ url_for('static', filename='reviews.css') }}">
 
 {% block main_content %}
-    <section class="reviews-section">
+    <main class="reviews-section">
         <h2 class="reviews-title">Reviews for {{ movie.title }}</h2>
-        <div class="carousel-container">
+        <section class="carousel-container">
             {% if reviews|length >= 3 %}
                 <button class="carousel-button prev" onclick="scrollReviews(-320)">&#10094;</button>
             {% endif %}
-            <div class="reviews-container">
+            <section class="reviews-container">
                 {% for review in reviews %}
                     <article class="review-card">
                         <p class="review-user"><strong>{{ review.user }}</strong></p>
-                        <div class="review-stars">{{ '⭐' * review.rating }}</div>
+                        <p class="review-stars">{{ '⭐' * review.rating }}</p>
                         <p class="review-text">{{ review.review_text }}</p>
                     </article>
                 {% else %}
                     <p>No reviews yet. Be the first to review!</p>
                 {% endfor %}
-            </div>
+            </section>
             {% if reviews|length >= 3 %}
                 <button class="carousel-button next" onclick="scrollReviews(320)">&#10095;</button>
             {% endif %}
-        </div>
-    </section>
+        </section>
+    </main>
 
     <section class="review-form-section">
         <h2>Write a Review</h2>

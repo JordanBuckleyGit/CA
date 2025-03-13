@@ -1,4 +1,3 @@
-/* Genre Section */
 section[id^="genre-"] {
     margin-bottom: 2rem;
 }
@@ -36,13 +35,13 @@ section[id^="genre-"] h2 {
 
 .movie-card img {
     width: 100%;
-    max-width: 200px; /* Adjust this value to control the image size */
+    max-width: 200px;
     height: auto;
     border-radius: 0.675rem;
     border: 3px solid #A9DFBF;
     margin-bottom: 1.1rem;
-    aspect-ratio: 2/3; /* Maintain a consistent aspect ratio (e.g., 2:3 for movie posters) */
-    object-fit: cover; /* Ensure the image covers the container without distortion */
+    aspect-ratio: 2/3;
+    object-fit: cover;
 }
 
 .movie-details {
