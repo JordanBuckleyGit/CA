@@ -1,17 +1,33 @@
 {% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='references.css') }}">
+{% endblock %}
 {% block main_content %}
-<h1>Reference Page</h1>
-<ul>
-    <li>Yep</li>
-    <li><a href="https://www.flaticon.com/free-icon/production_6348671?term=movie+camera&page=1&position=21&origin=search&related_id=6348671" target="_blank">Favicon</a></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-</ul>
-<a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
-
+<main>
+    <h1>Reference Page</h1>
+    <section id="references">
+        <ul id="list">
+            <li><a href="https://www.flaticon.com/free-icon/production_6348671?term=movie+camera&page=1&position=21&origin=search&related_id=6348671" target="_blank">Favicon</a></li>
+            <li><a href="https://www.w3schools.com/sql/">SQL queries (known from databases module in sem 1 also)</a></li>
+            <li><a href="https://kamelodee.medium.com/setting-up-user-management-in-flask-with-flask-admin-and-flask-login-4406c84fc0a6" target="_blank">Admin and user management</a></li>
+            <li><a href="https://www.geeksforgeeks.org/python-merging-two-dictionaries/">Merging data</a></li>
+            <li><a href="https://flask.palletsprojects.com/en/stable/quickstart/#sessions">Understanding sessions</a></li>
+            <li><a href="https://stackoverflow.com/questions/40369016/using-request-args-in-flask-for-a-variable-url">Comprehension of args</a></li>
+            <li><a href="https://docs.python.org/3/tutorial/errors.html">Try except and value errors</a></li>
+            <li><a href="https://flask.palletsprojects.com/en/stable/patterns/fileuploads/">Uploading Files</a></li>
+            <li><a href="https://realpython.com/primer-on-python-decorators/">Python Decorators</a></li>
+            <li><a href="https://flask.palletsprojects.com/en/stable/errorhandling/">Error handling</a></li>
+            <li><a href="https://www.youtube.com/watch?v=N0z3gVHIxEo">Learning how to use cursor for search</a></li>
+            <li><a href="https://www.cs.ucc.ie/~dgb/">Derek's Screenshots and slides</a></li>
+            <li><a href="https://fontawesome.com/icons/house?f=classic&s=solid">Home Icon</a></li>
+            <li><a href="https://fontawesome.com/icons/bookmark?f=classic&s=solid">Watchlist Icon</a></li>
+            <li><a href="https://fontawesome.com/icons/lightbulb?f=classic&s=solid">Lightbulb Icon</a></li>
+            <li><a href="https://fontawesome.com/icons/user?f=classic&s=solid">User Icon</a></li>
+            <li><a href="https://fontawesome.com/icons/user-plus?f=classic&s=solid">Follow Icon</a></li>
+            <li><a href="https://fontawesome.com/icons/user-minus?f=classic&s=solid">Unfollow Icon</a></li>
+            <li><a href="https://fontawesome.com/icons/eye?f=classic&s=solid">View Profile Icon</a></li>
+        </ul>
+    </section>
+    <a href="{{ url_for('index') }}" class="back-button">Back to Home</a>
+</main>
 {% endblock %}

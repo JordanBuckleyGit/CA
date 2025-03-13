@@ -1,0 +1,44 @@
+/* General Styles */
+h1 {
+    font-size: 2.5rem;
+    color: #A9DFBF;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(169, 223, 191, 0.5);
+}
+
+#references {
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    width: 50%;
+}
+
+#list {
+    list-style: none;
+    padding: 0;
+}
+
+#list li {
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #A9DFBF;
+    border-radius: 0.75rem;
+    transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#list li:hover {
+    background: rgba(169, 223, 191, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(169, 223, 191, 0.3);
+}
+
+#list li a {
+    color: #A9DFBF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+#list li a:hover {
+    color: #8ECBB0;
+}
