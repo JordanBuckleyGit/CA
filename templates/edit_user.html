@@ -1,15 +1,20 @@
 {% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}">
+{% endblock %}
 {% block main_content %}
-<h1>Edit User: {{ user.user_id }}</h1>
-<form method="POST">
-    <section id="username-change">
-        <label for="new_username">New Username:</label><br>
-        <input type="text" id="new_username" name="new_username" value="{{ user.user_id }}" required><br>
-    </section>
-    
-    <section>
-        <button type="submit">Update Username</button>
-    </section>
-</form>
+<section id="edit-profile">
+    <h1>Edit User: {{ user.user_id }}</h1>
+    <form method="POST">
+        <section class="form-group">
+            <label for="new_username">New Username:</label>
+            <input type="text" id="new_username" name="new_username" value="{{ user.user_id }}" required>
+        </section>
+        
+        <section class="form-group">
+            <button type="submit" id="submit-button">Update Username</button>
+        </section>
+    </form>
+</section>
 <a href="{{ url_for('manage_users') }}" class="back-button">Back to Manage Users</a>
 {% endblock %}

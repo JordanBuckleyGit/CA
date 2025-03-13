@@ -1,50 +1,53 @@
-<!-- FIX -->
-
 {% extends "base.html" %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='suggestion.css') }}">
+{% endblock %}
 {% block main_content %}
-<h1>Edit Movie</h1>
-<form method="POST">
-    <div>
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" value="{{ movie.title }}" required><br>
-    </div>
-    
-    <div>
-        <label for="genre">Genre:</label><br>
-        <select id="genre" name="genre" required>
-            <option value="Sci-Fi" {% if movie.genre == "Sci-Fi" %}selected{% endif %}>Sci-Fi</option>
-            <option value="Action" {% if movie.genre == "Action" %}selected{% endif %}>Action</option>
-            <option value="Crime" {% if movie.genre == "Crime" %}selected{% endif %}>Crime</option>
-            <option value="Drama" {% if movie.genre == "Drama" %}selected{% endif %}>Drama</option>
-            <option value="Fantasy" {% if movie.genre == "Fantasy" %}selected{% endif %}>Fantasy</option>
-            <option value="Thriller" {% if movie.genre == "Thriller" %}selected{% endif %}>Thriller</option>
-            <option value="Horror" {% if movie.genre == "Horror" %}selected{% endif %}>Horror</option>
-        </select><br>
-    </div>
-    
-    <div>
-        <label for="score">Score:</label><br>
-        <input type="number" id="score" name="score" step="0.1" min="0" max="10" value="{{ movie.score }}" required><br>
-    </div>
-    
-    <div>
-        <label for="year">Year:</label><br>
-        <input type="number" id="year" name="year" min="1900" max="2100" value="{{ movie.year }}" required><br>
-    </div>
-    
-    <div>
-        <label for="director">Director:</label><br>
-        <input type="text" id="director" name="director" value="{{ movie.director }}" required><br>
-    </div>
-    
-    <div>
-        <label for="description">Description:</label><br>
-        <textarea id="description" name="description" rows="5" cols="50" required>{{ movie.description }}</textarea><br>
-    </div>
-    
-    <div>
-        <button type="submit">Update Movie</button>
-    </div>
-</form>
-<a href="{{ url_for('manage_movies') }}" class="back-button">Back to Manage Movies</a>
+<main id="suggestion-container">
+    <h1>Edit Movie</h1>
+    <form method="POST">
+        <section>
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" value="{{ movie.title }}" required>
+        </section>
+
+        <section>
+            <label for="genre">Genre:</label>
+            <select id="genre" name="genre" required>
+                <option value="Sci-Fi" {% if movie.genre == "Sci-Fi" %}selected{% endif %}>Sci-Fi</option>
+                <option value="Action" {% if movie.genre == "Action" %}selected{% endif %}>Action</option>
+                <option value="Crime" {% if movie.genre == "Crime" %}selected{% endif %}>Crime</option>
+                <option value="Drama" {% if movie.genre == "Drama" %}selected{% endif %}>Drama</option>
+                <option value="Fantasy" {% if movie.genre == "Fantasy" %}selected{% endif %}>Fantasy</option>
+                <option value="Thriller" {% if movie.genre == "Thriller" %}selected{% endif %}>Thriller</option>
+                <option value="Horror" {% if movie.genre == "Horror" %}selected{% endif %}>Horror</option>
+            </select>
+        </section>
+
+        <section>
+            <label for="score">Score:</label>
+            <input type="number" id="score" name="score" step="0.1" min="0" max="10" value="{{ movie.score }}" required>
+        </section>
+
+        <section>
+            <label for="year">Year:</label>
+            <input type="number" id="year" name="year" min="1900" max="2100" value="{{ movie.year }}" required>
+        </section>
+
+        <section>
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director" value="{{ movie.director }}" required>
+        </section>
+
+        <section>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="5" required>{{ movie.description }}</textarea>
+        </section>
+
+        <section>
+            <button type="submit">Update Movie</button>
+        </section>
+    </form>
+    <a href="{{ url_for('manage_movies') }}" class="back-button">Back to Manage Movies</a>
+</main>
 {% endblock %}

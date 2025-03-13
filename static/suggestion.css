@@ -39,7 +39,7 @@
     border: 1px solid #A9DFBF;
     border-radius: 0.5rem;
     background: rgba(255, 255, 255, 0.1);
-    color: white;
+    color: #ccc;
     font-size: 1rem;
     transition: border-color 0.3s ease, background 0.3s ease;
 }

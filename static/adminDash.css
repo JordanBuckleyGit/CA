@@ -1,7 +1,7 @@
 
 h1 {
     font-size: 2rem;
-    color: #A9DFBF; /* Accent color */
+    color: #A9DFBF;
     margin-bottom: 1.5rem;
     text-align: center;
     text-shadow: 0 0 10px rgba(169, 223, 191, 0.5);
@@ -16,49 +16,32 @@ table {
 table th, table td {
     padding: 0.75rem;
     text-align: left;
-    border-bottom: 1px solid #A9DFBF; /* Accent border */
+    border-bottom: 1px solid #A9DFBF; 
 }
 
 table th {
-    background-color: rgba(169, 223, 191, 0.1); /* Light accent background */
+    background-color: rgba(169, 223, 191, 0.1);
     font-weight: bold;
-    color: #A9DFBF; /* Accent color */
+    color: #A9DFBF;
 }
 
 table tr:hover {
-    background-color: rgba(169, 223, 191, 0.1); /* Light accent background on hover */
+    background-color: rgba(169, 223, 191, 0.1); 
 }
 
-a {
-    color: #A9DFBF; /* Accent color for links */
+table a {
+    color: #A9DFBF; 
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-a:hover {
-    color: #8ECBB0; /* Slightly darker accent color on hover */
+table a:hover {
+    color: #8ECBB0;
     text-decoration: underline;
 }
 
-.btn, .back-button {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: #A9DFBF; /* Accent color */
-    color: #333; /* Dark text for contrast */
-    border-radius: 0.25rem;
-    text-align: center;
-    margin: 0.5rem 0;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.btn:hover, .back-button:hover {
-    background-color: #8ECBB0; /* Slightly darker accent color on hover */
-    transform: scale(1.05);
-}
-
-/* Additional Styles for Manage Reviews and Movie Suggestions */
 .btn-delete {
-    background-color: #dc3545; /* Red for delete buttons */
+    background-color: #dc3545;
     color: #fff;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
@@ -66,11 +49,11 @@ a:hover {
 }
 
 .btn-delete:hover {
-    background-color: #c82333; /* Darker red on hover */
+    background-color: #c82333;
 }
 
 .btn-accept {
-    background-color: #28a745; /* Green for accept buttons */
+    background-color: #28a745;
     color: #fff;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
@@ -78,11 +61,11 @@ a:hover {
 }
 
 .btn-accept:hover {
-    background-color: #218838; /* Darker green on hover */
+    background-color: #218838;
 }
 
 .btn-reject {
-    background-color: #dc3545; /* Red for reject buttons */
+    background-color: #dc3545;
     color: #fff;
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
@@ -90,7 +73,7 @@ a:hover {
 }
 
 .btn-reject:hover {
-    background-color: #c82333; /* Darker red on hover */
+    background-color: #c82333;
 }
 
 img {

@@ -3,33 +3,51 @@
 {% block styles %}
     <link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}">
 {% endblock %}
+
 {% block main_content %}
-<h1>
-    <i class="fas fa-user-circle" id="user-icon"></i>
-    {{ user.user_id }}'s Profile
-</h1>
+<section id="network">
+    <header>
+        <h3>
+            <i class="fas fa-user-circle" id="user-icon"></i>
+            {{ user.user_id }}'s Profile
+        </h3>
+    </header>
 
-<h2>Reviews</h2>
-<ul>
-    {% for review in reviews %}
-    <li>{{ review.title }} - {{ review.rating }}/10</li>
-    <p>{{ review.review_text }}</p>
-    {% endfor %}
-</ul>
+    <section id="network-columns">
+        <!-- Reviews Section -->
+        <article id="follower-page">
+            <h4>Reviews</h4>
+            <ul>
+                {% for review in reviews %}
+                <li class="review-item">
+                    <p class="review-movie">{{ review.title }} - {{ review.rating }}/10</p>
+                    <p class="review-text">{{ review.review_text }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </article>
 
-<h2>Followers</h2>
-<ul>
-    {% for follower in followers %}
-    <li>{{ follower.follower }}</li>
-    {% endfor %}
-</ul>
+        <!-- Followers Section -->
+        <article id="network-page">
+            <h4>Followers</h4>
+            <ul>
+                {% for follower in followers %}
+                <li>{{ follower.follower }}</li>
+                {% endfor %}
+            </ul>
+        </article>
 
-<h2>Following</h2>
-<ul>
-    {% for follow in following %}
-    <li>{{ follow.following }}</li>
-    {% endfor %}
-</ul>
-<br>
+        <!-- Following Section -->
+        <article id="network-page">
+            <h4>Following</h4>
+            <ul>
+                {% for follow in following %}
+                <li>{{ follow.following }}</li>
+                {% endfor %}
+            </ul>
+        </article>
+    </section>
+</section>
 <a href="{{ url_for('user') }}" class="back-button">Back to Profile</a>
+
 {% endblock %}
